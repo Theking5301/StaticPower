@@ -1,10 +1,7 @@
 package theking530.staticpower.machines.quarry;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -15,15 +12,12 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import theking530.staticpower.StaticPower;
+import theking530.staticpower.assists.utilities.WorldUtilities;
 import theking530.staticpower.client.GuiIDRegistry;
 import theking530.staticpower.items.tools.CoordinateMarker;
-import theking530.staticpower.machines.BaseMachineBlock;
-import theking530.staticpower.machines.poweredgrinder.TileEntityPoweredGrinder;
-import theking530.staticpower.machines.solderingtable.TileEntitySolderingTable;
-import theking530.staticpower.utils.EnumTextFormatting;
-import theking530.staticpower.utils.WorldUtilities;
+import theking530.staticpower.machines.BlockMachineBase;
 
-public class BlockQuarry extends BaseMachineBlock{
+public class BlockQuarry extends BlockMachineBase{
 
 	public BlockQuarry() {
 		super("Quarry");
@@ -31,10 +25,10 @@ public class BlockQuarry extends BaseMachineBlock{
 	    setResistance(5.0f);
 	}
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
+		return EnumBlockRenderType.INVISIBLE;
 	}
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     	if (world.isRemote) {
     		return true;
     	}else if (!player.isSneaking()) {
@@ -47,12 +41,12 @@ public class BlockQuarry extends BaseMachineBlock{
 					if(WorldUtilities.getAreaBetweenCorners(start, end) <= 200000) {
 						if(start.getDistance(pos.getX(), pos.getY(), pos.getZ()) < 70 || end.getDistance(pos.getX(), pos.getY(), pos.getZ()) < 70) {
 							entity.setCoordinates(start, end);
-							player.addChatComponentMessage(new TextComponentString("Coordinates Set!"));	
+							player.sendMessage(new TextComponentString("Coordinates Set!"));	
 						}else{
-							player.addChatComponentMessage(new TextComponentString("Area too far! The area must be less than 70 blocks away."));						
+							player.sendMessage(new TextComponentString("Area too far! The area must be less than 70 blocks away."));						
 						}
 					}else{
-						player.addChatComponentMessage(new TextComponentString("Area too large! The area must be less than 200,000 blocks."));						
+						player.sendMessage(new TextComponentString("Area too large! The area must be less than 200,000 blocks."));						
 					}
 					return true;
 				}
@@ -66,7 +60,7 @@ public class BlockQuarry extends BaseMachineBlock{
     	}
 	}
 	@Override
-	public TileEntity createNewTileEntity(World var1, int var2) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityQuarry();
 	}
 }

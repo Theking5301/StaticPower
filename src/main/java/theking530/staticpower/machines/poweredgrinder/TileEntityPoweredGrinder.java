@@ -1,156 +1,140 @@
 package theking530.staticpower.machines.poweredgrinder;
 
-import java.util.Random;
-
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import theking530.staticpower.assists.utilities.InventoryUtilities;
+import theking530.staticpower.assists.utilities.TileEntityUtilities;
 import theking530.staticpower.handlers.crafting.registries.GrinderRecipeRegistry;
 import theking530.staticpower.handlers.crafting.wrappers.GrinderOutputWrapper;
-import theking530.staticpower.machines.BaseMachine;
+import theking530.staticpower.items.ModItems;
+import theking530.staticpower.items.upgrades.BaseOutputMultiplierUpgrade;
+import theking530.staticpower.machines.TileEntityMachine;
+import theking530.staticpower.machines.tileentitycomponents.BatteryInteractionComponent;
+import theking530.staticpower.machines.tileentitycomponents.TileEntityItemInputServo;
+import theking530.staticpower.machines.tileentitycomponents.TileEntityItemOutputServo;
 
-public class TileEntityPoweredGrinder extends BaseMachine {
+public class TileEntityPoweredGrinder extends TileEntityMachine {
 	
-	private static final int[] slots_top = new int[] {0};
-	private static final int[] slots_side = new int[] {1,2,3};		
-
+	private float bonusOutputChance;
 	
 	public TileEntityPoweredGrinder() {
-		initializeBasicMachine(2, 100000, 80, 100, 8, new int[]{0}, new int[]{1, 2, 3}, new int[]{4, 5, 6});
+		initializeSlots(2, 1, 3);
+		initializeBasicMachine(2, 1000, 100000, 80, 180);
+		registerComponent(new BatteryInteractionComponent("BatteryComponent", slotsInternal, 1, energyStorage));
+		registerComponent(new TileEntityItemOutputServo(this, 1, slotsOutput, 0, 1, 2));
+		registerComponent(new TileEntityItemInputServo(this, 2, slotsInput, 0));
+		bonusOutputChance = 0.0f;
+		setName("container.PoweredGrinder");
 	}
 
-    @Override  
-	public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        STORAGE.readFromNBT(nbt);
-        
-        if(slots != null) {
-            NBTTagList list = nbt.getTagList("Items", 10);
-    		slots = new ItemStack[getSizeInventory()];
-            for (int i =0; i < list.tagCount(); i++) {
-    			NBTTagCompound nbt1 = (NBTTagCompound)list.getCompoundTagAt(i);
-    			byte b0 = nbt1.getByte("Slot");
-    			
-    			if (b0 >= 0 && b0 < slots.length) {
-    				slots[b0] = ItemStack.loadItemStackFromNBT(nbt1);
-    			}
-    		}	
-        }
-    }		
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        STORAGE.writeToNBT(nbt);	
-    	if(slots != null) {
-        	NBTTagList list = new NBTTagList();
-    		for (int i = 0; i < slots.length; i++) {
-    			if (slots[i] != null) {
-    				NBTTagCompound nbt1 = new NBTTagCompound();
-    				nbt1.setByte("Slot", (byte)i);
-    				slots[i].writeToNBT(nbt1);
-    				list.appendTag(nbt1);
-    			}
-    			
-    		}
-    		nbt.setTag("Items", list);
-    	}	
-    	return nbt;
-	}	    
-		
-	//IInventory				
 	@Override
-	public String getName() {
-		return "Powered Grinder";		
-	}
-	
-	//Process 
-	public GrinderOutputWrapper getGrindingResult(ItemStack stack) {
-		if(stack != null) {
-			return GrinderRecipeRegistry.Grinding().getgrindingResult(stack);
-		}else{
-			return null;
-		}
-		
-	}
-	public boolean hasResult(ItemStack stack) {
-		if(stack != null && getGrindingResult(stack) != null) {
-			return true;
-		}
-		return false;
+	public boolean hasValidRecipe() {
+		return GrinderRecipeRegistry.Grinding().getGrindingRecipe(slotsInput.getStackInSlot(0)) != null;
 	}
 	@Override
-	public boolean canProcess(ItemStack stack) {
-		if(hasResult(stack) == true) {
-			if(getGrindingResult(stack).getOutputItemCount() > 0) {
-				boolean flag = true;
+	public boolean canProcess() {
+		if(hasValidRecipe()) {
+			GrinderOutputWrapper recipe = GrinderRecipeRegistry.Grinding().getGrindingRecipe(slotsInput.getStackInSlot(0));
+			if(recipe.getOutputItemCount() > 0) {
+				boolean itemOutputValidFlag = true;
 				boolean slot1 = false;
 				boolean slot2 = false;
 				boolean slot3 = false;
-				GrinderOutputWrapper tempWrapper = getGrindingResult(stack);
-				for(int i=0; i<tempWrapper.getOutputItemCount(); i++) {
-					if(tempWrapper.getOutputItems().get(i).isValid()) {
-						if(canSlotAcceptItemstack(tempWrapper.getOutputItems().get(i).getOutput(), slots[1]) && slot1 == false) {
+				for(int i=0; i<recipe.getOutputItemCount(); i++) {
+					if(recipe.getOutputItems().get(i).isValid()) {
+						if(InventoryUtilities.canFullyInsertStackIntoSlot(slotsOutput, 0, recipe.getOutputItems().get(i).getOutput()) && slot1 == false) {
 							slot1 = true;
-						}else if(canSlotAcceptItemstack(tempWrapper.getOutputItems().get(i).getOutput(), slots[2]) && slot2 == false) {
+						}else if(InventoryUtilities.canFullyInsertStackIntoSlot(slotsOutput, 1, recipe.getOutputItems().get(i).getOutput()) && slot2 == false) {
 							slot2 = true;
-						}else if(canSlotAcceptItemstack(tempWrapper.getOutputItems().get(i).getOutput(), slots[3]) && slot3 == false) {
+						}else if(InventoryUtilities.canFullyInsertStackIntoSlot(slotsOutput, 2, recipe.getOutputItems().get(i).getOutput()) && slot3 == false) {
 							slot3 = true;
 						}else{
-							flag = false;
+							itemOutputValidFlag = false;
 						}
 					}
 				}
-				if(STORAGE.getEnergyStored() >= PROCESSING_ENERGY_MULT*1000 && flag == true) {
+				if(energyStorage.getEnergyStored() >= getProcessingEnergy() && itemOutputValidFlag == true) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
+	
+	//Process 
 	public void process() {
-		//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		if(!isProcessing() && !isMoving() && canProcess(slots[0])) {
-				MOVE_TIMER = 1;
-		}
-		if(!isProcessing() && isMoving() && canProcess(slots[0])) {
-			if(MOVE_TIMER < MOVE_SPEED) {
-				MOVE_TIMER++;
-			}else{
-				moveItem(0,7);
-				MOVE_TIMER=0;
-				PROCESSING_TIMER = 1;
+		if(!getWorld().isRemote) {
+			if(canProcess() && !isProcessing() && !isMoving()) {
+				moveTimer = 1;
 			}
-		}
-		if(isProcessing() && !isMoving()) {
-			if(PROCESSING_TIMER <= PROCESSING_TIME) {
-				useEnergy((1000*PROCESSING_ENERGY_MULT) / PROCESSING_TIME);
-				PROCESSING_TIMER++;
-			}else{
-				if(getGrindingResult(slots[7]) != null) {
-					for(int j=0; j<getGrindingResult(slots[7]).getOutputItemCount(); j++) {
-						for(int i=1; i<4; i++) {
-							if(diceRoll(getGrindingResult(slots[7]).getOutputItems().get(j).getPercentage())) {
-								if(placeStackInSlot(getGrindingResult(slots[7]).getOutputItems().get(j).getOutput(), i) == true) {
+			if(canProcess() && !isProcessing() && isMoving() ) {
+				if(moveTimer < moveSpeed) {
+					moveTimer++;
+				}else{
+					transferItemInternally(slotsInput, 0, slotsInternal, 0);
+					moveTimer=0;
+					processingTimer = 1;
+					updateBlock();
+				}
+			}
+			if(isProcessing() && !isMoving()) {
+				if(processingTimer < processingTime) {
+					useEnergy(getProcessingEnergy() / processingTime);
+					processingTimer++;
+				}else{
+					GrinderOutputWrapper recipe = GrinderRecipeRegistry.Grinding().getGrindingRecipe(slotsInternal.getStackInSlot(0));
+					if(recipe == null) {
+						processingTimer = 0;
+						return;
+					}
+					for(int j=0; j<recipe.getOutputItemCount(); j++) {
+						ItemStack result = recipe.getOutputItems().get(j).getOutput();
+						if(TileEntityUtilities.diceRoll(recipe.getOutputItems().get(j).getPercentage()+bonusOutputChance)) {
+							boolean flag = false;
+							int slot = -1;
+							for(int i=0; i<3; i++) {
+								if(InventoryUtilities.canFullyInsertStackIntoSlot(slotsOutput, i, recipe.getOutputItems().get(j).getOutput())) {
+									slot = i;
+									flag = true;
 									break;
 								}	
 							}
-						}
+							if(!flag) {
+								for(int i=0; i<3; i++) {
+									if(InventoryUtilities.canFullyInsertStackIntoSlot(slotsOutput, i, result)) {
+										slot = i;
+										break;
+									}	
+								}
+							}
+							if(slot != -1) {
+								slotsOutput.insertItem(slot, result.copy(), false);
+							}
+						}						
 					}
-				}
-				slots[7] = null;
-				PROCESSING_TIMER=0;
-				MOVE_TIMER = 0;
+					setInternalStack(0, ItemStack.EMPTY);
+					updateBlock();
+					processingTimer=0;
+					moveTimer = 0;
+				}	
 			}
 		}
 	}
- 
-	public boolean diceRoll(float percentage) {
-		Random rand = new Random();
-		float randFloat = rand.nextFloat();
-		
-		return percentage > randFloat ? true : false;
+	@Override
+	public void upgradeTick(){
+		super.upgradeTick();
+		outputUpgradeHandler();
+	}
+	private void outputUpgradeHandler() {
+		if(hasUpgrade(ModItems.BasicOutputMultiplierUpgrade)) {
+			BaseOutputMultiplierUpgrade tempUpgrade = (BaseOutputMultiplierUpgrade) getUpgrade(ModItems.BasicOutputMultiplierUpgrade).getItem();
+			bonusOutputChance = tempUpgrade.getUpgradeValueAtIndex(getUpgrade(ModItems.BasicOutputMultiplierUpgrade), 0);
+		}else{
+			bonusOutputChance = 0.0f;
+		}
+		processingEnergyMult = (processingEnergyMult * (1+bonusOutputChance/2.0f));
+	}
+	
+	public float getBonusOutputChance() {
+		return Math.min(1.0f, bonusOutputChance);
 	}
 }
-
-
-	

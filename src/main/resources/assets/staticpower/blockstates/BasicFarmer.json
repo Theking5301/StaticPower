@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "staticpower:BasicFarmer" },
+        "facing=south": { "model": "staticpower:BasicFarmer", "y": 180 },
+        "facing=west":  { "model": "staticpower:BasicFarmer", "y": 270 },
+        "facing=east":  { "model": "staticpower:BasicFarmer", "y": 90 }
+    }
+}

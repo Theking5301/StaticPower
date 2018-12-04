@@ -1,10 +1,10 @@
 package theking530.staticpower;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import theking530.staticpower.items.ModItems;
+import theking530.staticpower.blocks.crops.ModPlants;
  
 public class CreativeTabStandard extends CreativeTabs {
  
@@ -14,7 +14,7 @@ public class CreativeTabStandard extends CreativeTabs {
     }
  
     @SideOnly(Side.CLIENT)
-    public Item getTabIconItem() {
-        return ModItems.EnergizedCrop;
+    public ItemStack getTabIconItem() {
+        return new ItemStack(ModPlants.EnergizedCrop);
     }
 }

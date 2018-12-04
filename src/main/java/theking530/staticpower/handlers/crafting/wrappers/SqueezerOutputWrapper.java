@@ -5,18 +5,22 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class SqueezerOutputWrapper {
 	
-	protected final ItemStack outputItem;
-	protected final FluidStack outputFluid;
+	private final ItemStack outputItem;
+	private final FluidStack outputFluid;
+	private final ItemStack inputItem;
 	
-	public SqueezerOutputWrapper(ItemStack output, FluidStack fluid) {
+	public SqueezerOutputWrapper(ItemStack input, ItemStack output, FluidStack fluid) {
 		outputItem = output;
 		outputFluid = fluid;
+		inputItem = input;
 	}
 	
 	public ItemStack getOutputItem() {
 		return outputItem;
 	}
-
+	public ItemStack getInputItem() {
+		return inputItem;
+	}
 	public FluidStack getOutputFluid() {
 		return outputFluid;
 	}

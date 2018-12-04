@@ -1,0 +1,8 @@
+{
+    "variants": {
+	    "facing=north": { "model": "staticpower:DigistoreIOPort" },
+        "facing=south": { "model": "staticpower:DigistoreIOPort", "y": 180 },
+        "facing=west":  { "model": "staticpower:DigistoreIOPort", "y": 270 },
+        "facing=east":  { "model": "staticpower:DigistoreIOPort", "y": 90 }
+    }
+}

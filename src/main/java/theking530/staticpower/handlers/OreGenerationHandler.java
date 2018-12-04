@@ -5,8 +5,8 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -24,9 +24,6 @@ public class OreGenerationHandler implements IWorldGenerator {
     }
     private void generateSurface(World world, Random rand, int chunkX, int chunkZ) {
         for (int k = 0; k < 16; k++) {
-            int firstBlockXCoord = chunkX + rand.nextInt(16);
-            int firstBlockZCoord = chunkZ + rand.nextInt(16);
-
             if (StaticPowerConfig.COPPER_ORE_GEN) {
                 generateOre(ModBlocks.CopperOre, world, rand, chunkX, chunkZ,2,6,4,30,90);
             }
@@ -34,13 +31,25 @@ public class OreGenerationHandler implements IWorldGenerator {
                 generateOre(ModBlocks.TinOre, world, rand, chunkX, chunkZ,2,6,4,30,90);
             }
             if (StaticPowerConfig.LEAD_ORE_GEN) {
-                generateOre(ModBlocks.LeadOre, world, rand, chunkX, chunkZ,2,6,4,0,40);
+                generateOre(ModBlocks.LeadOre, world, rand, chunkX, chunkZ,1,5,3,0,32);
             }
             if (StaticPowerConfig.SILVER_ORE_GEN) {
-                generateOre(ModBlocks.SilverOre, world, rand, chunkX, chunkZ,2,6,4,0,40);
+                generateOre(ModBlocks.SilverOre, world, rand, chunkX, chunkZ,1,5,4,0,32);
             }
             if (StaticPowerConfig.PLATINUM_ORE_GEN) {
-                generateOre(ModBlocks.PlatinumOre, world, rand, chunkX, chunkZ,1,3,3,0,20);
+                generateOre(ModBlocks.PlatinumOre, world, rand, chunkX, chunkZ,2,4,2,0,30);
+            }
+            if (StaticPowerConfig.NICKEL_ORE_GEN) {
+                generateOre(ModBlocks.NickelOre, world, rand, chunkX, chunkZ,1,3,3,0,40);
+            }
+            if (StaticPowerConfig.ALUMINIUM_ORE_GEN) {
+                generateOre(ModBlocks.AluminiumOre, world, rand, chunkX, chunkZ,1,5,4,30,90);
+            }
+            if (StaticPowerConfig.SAPPHIRE_ORE_GEN) {
+                generateOre(ModBlocks.SapphireOre, world, rand, chunkX, chunkZ,1,3,2,0,40);
+            }
+            if (StaticPowerConfig.RUBY_ORE_GEN) {
+                generateOre(ModBlocks.RubyOre, world, rand, chunkX, chunkZ,1,4,2,0,40);
             }
         }
     }

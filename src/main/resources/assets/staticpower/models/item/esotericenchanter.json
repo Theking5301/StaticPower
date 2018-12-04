@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+	    "top": "staticpower:blocks/machines/esoteric_enchanter_side",
+        "front": "staticpower:blocks/machines/esoteric_enchanter_front",
+        "side": "staticpower:blocks/machines/esoteric_enchanter_side"
+    }
+}

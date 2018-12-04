@@ -4,85 +4,73 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 import theking530.staticpower.assists.RegisterHelper;
 import theking530.staticpower.blocks.ModBlocks;
+import theking530.staticpower.blocks.crops.ModPlants;
 import theking530.staticpower.fluids.ModFluids;
-import theking530.staticpower.items.ModItems;
+import theking530.staticpower.handlers.crafting.Craft;
+import theking530.staticpower.items.ItemMaterials;
+import theking530.staticpower.items.MiscItems;
+import theking530.staticpower.items.armor.ModArmor;
 
 public class InfuserRecipes {
 
-	public static void registerInfusionRecipe() {
+	public static void registerInfusionRecipes() {
 		//StaticFluid
-		oreDictionaryStack("logWood", Item.getItemFromBlock(ModBlocks.StaticWood), new FluidStack(ModFluids.StaticFluid, 150));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE)), new ItemStack(Item.getItemFromBlock(ModBlocks.StaticCobblestone)), new FluidStack(ModFluids.StaticFluid, 50));	
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.ObsidianGlass)), new ItemStack(Item.getItemFromBlock(ModBlocks.StaticLamp)), new FluidStack(ModFluids.StaticFluid, 100));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.IRON_INGOT), new ItemStack(ModItems.StaticIngot), new FluidStack(ModFluids.StaticFluid, 250));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.IRON_BLOCK)), new ItemStack(Item.getItemFromBlock(ModBlocks.StaticBlock)), new FluidStack(ModFluids.StaticFluid, 2250));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.BUCKET), new ItemStack(ModFluids.StaticBucket), new FluidStack(ModFluids.StaticFluid, 1000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.IRON_HELMET), new ItemStack(ModItems.StaticHelmet), new FluidStack(ModFluids.StaticFluid, 1250));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.IRON_CHESTPLATE), new ItemStack(ModItems.StaticChestplate), new FluidStack(ModFluids.StaticFluid, 2000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.IRON_LEGGINGS), new ItemStack(ModItems.StaticLeggings), new FluidStack(ModFluids.StaticFluid, 1750));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.IRON_BOOTS), new ItemStack(ModItems.StaticBoots), new FluidStack(ModFluids.StaticFluid, 1000));
-		oreDictionaryStack("dustIron", ModItems.StaticDust, new FluidStack(ModFluids.StaticFluid, 100));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.StaticCrop), new ItemStack(ModItems.EnergizedCrop), new FluidStack(ModFluids.StaticFluid, 10000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.DIRT)), new ItemStack(Item.getItemFromBlock(ModBlocks.StaticGrass)), new FluidStack(ModFluids.StaticFluid, 500));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.CHEST)), new ItemStack(Item.getItemFromBlock(ModBlocks.StaticChest)), new FluidStack(ModFluids.StaticFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticWood)), Craft.ing("logWood"), new FluidStack(ModFluids.StaticFluid, 150));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticCobblestone)), Craft.ing(Blocks.COBBLESTONE), new FluidStack(ModFluids.StaticFluid, 50));	
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticLamp)), Craft.ing(ModBlocks.ObsidianGlass), new FluidStack(ModFluids.StaticFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(ItemMaterials.ingotStatic, Craft.ing(Items.IRON_INGOT), new FluidStack(ModFluids.StaticFluid, 250));
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.dustStatic),  Craft.ing("dustIron"), new FluidStack(ModFluids.StaticFluid, 250));
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.plateStatic), Craft.ing("plateIron"), new FluidStack(ModFluids.StaticFluid, 250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticBlock)), Craft.ing(Item.getItemFromBlock(Blocks.IRON_BLOCK)), new FluidStack(ModFluids.StaticFluid, 2250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.StaticHelmet), Craft.ing(Items.IRON_HELMET), new FluidStack(ModFluids.StaticFluid, 1250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.StaticChestplate), Craft.ing(Items.IRON_CHESTPLATE), new FluidStack(ModFluids.StaticFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.StaticLeggings), Craft.ing(Items.IRON_LEGGINGS), new FluidStack(ModFluids.StaticFluid, 1750));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.StaticBoots), Craft.ing(Items.IRON_BOOTS), new FluidStack(ModFluids.StaticFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModPlants.EnergizedCrop), Craft.ing(ModPlants.StaticCrop), new FluidStack(ModFluids.StaticFluid, 10000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticGrass)), Craft.ing(Item.getItemFromBlock(Blocks.DIRT)), new FluidStack(ModFluids.StaticFluid, 500));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticChest)), Craft.ing(Item.getItemFromBlock(Blocks.CHEST)), new FluidStack(ModFluids.StaticFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticSolarPanel)), Craft.ing(Item.getItemFromBlock(ModBlocks.BasicSolarPanel)), new FluidStack(ModFluids.StaticFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(MiscItems.staticPie, Craft.ing(MiscItems.applePie), new FluidStack(ModFluids.StaticFluid, 50));
 		
 		//EnergizedFluid	
-		oreDictionaryStack("logWood", Item.getItemFromBlock(ModBlocks.EnergizedWood), new FluidStack(ModFluids.EnergizedFluid, 150));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE)), new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedCobblestone)), new FluidStack(ModFluids.EnergizedFluid, 50));	
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.ObsidianGlass)), new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedLamp)), new FluidStack(ModFluids.EnergizedFluid, 100));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.StaticIngot), new ItemStack(ModItems.EnergizedIngot), new FluidStack(ModFluids.EnergizedFluid, 250));		
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.IRON_BLOCK)), new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedBlock)), new FluidStack(ModFluids.EnergizedFluid, 2250));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.BUCKET), new ItemStack(ModFluids.EnergizedBucket), new FluidStack(ModFluids.EnergizedFluid, 1000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.StaticHelmet), new ItemStack(ModItems.EnergizedHelmet), new FluidStack(ModFluids.EnergizedFluid, 1250));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.StaticChestplate), new ItemStack(ModItems.EnergizedChestplate), new FluidStack(ModFluids.EnergizedFluid, 2000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.StaticLeggings), new ItemStack(ModItems.EnergizedLeggings), new FluidStack(ModFluids.EnergizedFluid, 1750));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.StaticBoots), new ItemStack(ModItems.EnergizedBoots), new FluidStack(ModFluids.EnergizedFluid, 1000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.StaticDust), new ItemStack(ModItems.EnergizedDust), new FluidStack(ModFluids.EnergizedFluid, 100));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.EnergizedCrop), new ItemStack(ModItems.LumumCrop), new FluidStack(ModFluids.EnergizedFluid, 20000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.DIRT)), new ItemStack(ModBlocks.AdvancedEarth), new FluidStack(ModFluids.EnergizedFluid, 250));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticSolarPanel)), new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedSolarPanel)), new FluidStack(ModFluids.EnergizedFluid, 750));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticBattery)), new ItemStack(ModBlocks.EnergizedBattery), new FluidStack(ModFluids.EnergizedFluid, 10000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.StaticChest)), new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedChest)), new FluidStack(ModFluids.EnergizedFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedWood)), Craft.ing("logWood"), new FluidStack(ModFluids.EnergizedFluid, 150));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedCobblestone)), Craft.ing(Blocks.COBBLESTONE), new FluidStack(ModFluids.EnergizedFluid, 50));	
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedLamp)), Craft.ing(ModBlocks.ObsidianGlass), new FluidStack(ModFluids.EnergizedFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.ingotEnergized), Craft.ing(ItemMaterials.ingotStatic), new FluidStack(ModFluids.EnergizedFluid, 250));		
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.dustEnergized), Craft.ing(ItemMaterials.dustStatic), new FluidStack(ModFluids.EnergizedFluid, 250));
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.plateEnergized), Craft.ing(ItemMaterials.plateStatic), new FluidStack(ModFluids.EnergizedFluid, 250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedBlock)), Craft.ing(Item.getItemFromBlock(Blocks.IRON_BLOCK)), new FluidStack(ModFluids.EnergizedFluid, 2250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.EnergizedHelmet), Craft.ing(ModArmor.StaticHelmet), new FluidStack(ModFluids.EnergizedFluid, 1250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.EnergizedChestplate), Craft.ing(ModArmor.StaticChestplate), new FluidStack(ModFluids.EnergizedFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.EnergizedLeggings), Craft.ing(ModArmor.StaticLeggings), new FluidStack(ModFluids.EnergizedFluid, 1750));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.EnergizedBoots), Craft.ing(ModArmor.StaticBoots), new FluidStack(ModFluids.EnergizedFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModPlants.LumumCrop), Craft.ing(ModPlants.EnergizedCrop), new FluidStack(ModFluids.EnergizedFluid, 20000));	
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedSolarPanel)), Craft.ing(Item.getItemFromBlock(ModBlocks.StaticSolarPanel)), new FluidStack(ModFluids.EnergizedFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedChest)), Craft.ing(Item.getItemFromBlock(ModBlocks.StaticChest)), new FluidStack(ModFluids.EnergizedFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedGrass)), Craft.ing(Item.getItemFromBlock(Blocks.DIRT)), new FluidStack(ModFluids.EnergizedFluid, 500));
+		RegisterHelper.registerInfuserRecipe(MiscItems.energizedPie, Craft.ing(MiscItems.staticPie), new FluidStack(ModFluids.EnergizedFluid, 50));
 		
 		//LumumFluid
-		oreDictionaryStack("logWood", Item.getItemFromBlock(ModBlocks.LumumWood), new FluidStack(ModFluids.LumumFluid, 150));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE)), new ItemStack(Item.getItemFromBlock(ModBlocks.LumumCobblestone)), new FluidStack(ModFluids.LumumFluid, 50));	
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.ObsidianGlass)), new ItemStack(Item.getItemFromBlock(ModBlocks.LumumLamp)), new FluidStack(ModFluids.LumumFluid, 100));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.EnergizedIngot), new ItemStack(ModItems.LumumIngot), new FluidStack(ModFluids.LumumFluid, 250));		
-		RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.EnergizedDust), new ItemStack(ModItems.LumumDust), new FluidStack(ModFluids.LumumFluid, 100));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedSolarPanel)), new ItemStack(Item.getItemFromBlock(ModBlocks.LumumSolarPanel)), new FluidStack(ModFluids.LumumFluid, 750));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedBlock)), new ItemStack(Item.getItemFromBlock(ModBlocks.LumumBlock)), new FluidStack(ModFluids.LumumFluid, 2250));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedBattery)), new ItemStack(ModBlocks.LumumBattery), new FluidStack(ModFluids.LumumFluid, 10000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.EnergizedChest)), new ItemStack(Item.getItemFromBlock(ModBlocks.LumumChest)), new FluidStack(ModFluids.LumumFluid, 2000));
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.BUCKET), new ItemStack(ModFluids.LumumBucket), new FluidStack(ModFluids.LumumFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.LumumWood)), Craft.ing("logWood"), new FluidStack(ModFluids.LumumFluid, 150));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.LumumCobblestone)), Craft.ing(Blocks.COBBLESTONE), new FluidStack(ModFluids.LumumFluid, 50));	
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.LumumLamp)), Craft.ing(ModBlocks.ObsidianGlass), new FluidStack(ModFluids.LumumFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.ingotLumum), Craft.ing(ItemMaterials.ingotEnergized), new FluidStack(ModFluids.LumumFluid, 250));		
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.dustLumum), Craft.ing(ItemMaterials.dustEnergized), new FluidStack(ModFluids.LumumFluid, 250));
+		RegisterHelper.registerInfuserRecipe(Craft.outputStack(ItemMaterials.plateLumum), Craft.ing(ItemMaterials.plateEnergized), new FluidStack(ModFluids.LumumFluid, 250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.LumumSolarPanel)), Craft.ing(ModBlocks.EnergizedSolarPanel), new FluidStack(ModFluids.LumumFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.LumumBlock)), Craft.ing(ModBlocks.EnergizedBlock), new FluidStack(ModFluids.LumumFluid, 2250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.LumumChest)), Craft.ing(ModBlocks.EnergizedChest), new FluidStack(ModFluids.LumumFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.LumumHelmet), Craft.ing(ModArmor.EnergizedHelmet), new FluidStack(ModFluids.LumumFluid, 1250));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.LumumChestplate), Craft.ing(ModArmor.EnergizedChestplate), new FluidStack(ModFluids.LumumFluid, 2000));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.LumumLeggings), Craft.ing(ModArmor.EnergizedLeggings), new FluidStack(ModFluids.LumumFluid, 1750));
+		RegisterHelper.registerInfuserRecipe(new ItemStack(ModArmor.LumumBoots), Craft.ing(ModArmor.EnergizedBoots), new FluidStack(ModFluids.LumumFluid, 1000));
+		RegisterHelper.registerInfuserRecipe(MiscItems.lumumPie, Craft.ing(MiscItems.energizedPie), new FluidStack(ModFluids.LumumFluid, 50));
 		
 		//Water
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Item.getItemFromBlock(Blocks.SAND)), new ItemStack(Items.CLAY_BALL), new FluidStack(FluidRegistry.WATER, 250));	
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.BUCKET), new ItemStack(Items.WATER_BUCKET), new FluidStack(FluidRegistry.WATER, 1000));
-		
-		//Lava
-		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.BUCKET), new ItemStack(Items.LAVA_BUCKET), new FluidStack(FluidRegistry.LAVA, 1000));
-		
-		//EnderFluid
-		//RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.InertInfusionBlend), OreDictionary.getOres("dustEnderium").get(0), fluidStack("ender", 250));
-		//RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.InertIngot), OreDictionary.getOres("ingotEnderium").get(0), fluidStack("ender", 250));
-		
-		//Redstone
-		//RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.InertInfusionBlend), new ItemStack(Items.redstone, 2), fluidStack("redstone", 100));
-		
-		//Glowstone
-		//RegisterHelper.registerInfuserRecipe(new ItemStack(ModItems.InertInfusionBlend), new ItemStack(Items.glowstone_dust, 2), fluidStack("glowstone", 100));
-	}
-	public static void oreDictionaryStack(String ore, Item output, FluidStack fluidStack) {
-		for(int index = 0; index < OreDictionary.getOres(ore).size(); index++) {
-			ItemStack tempStack = OreDictionary.getOres(ore).get(index);
-			RegisterHelper.registerInfuserRecipe(tempStack, new ItemStack(output), fluidStack);
-		}
+		RegisterHelper.registerInfuserRecipe(new ItemStack(Items.CLAY_BALL), Craft.ing(Blocks.GRAVEL), new FluidStack(FluidRegistry.WATER, 1000));	
 	}
 }

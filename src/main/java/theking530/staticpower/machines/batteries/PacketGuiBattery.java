@@ -10,11 +10,11 @@ import theking530.staticpower.machines.batteries.tileentities.TileEntityBattery;
 
   
 public class PacketGuiBattery implements IMessage{
-    private static int INPUT_PER_TICK;
-    private static int OUTPUT_PER_TICK;
-    private static int x;
-    private static int y;
-    private static int z;
+    private int INPUT_PER_TICK;
+    private int OUTPUT_PER_TICK;
+    private int x;
+    private int y;
+    private int z;
 
     
     public PacketGuiBattery() {}
@@ -46,15 +46,15 @@ public class PacketGuiBattery implements IMessage{
       buf.writeInt(z);
     }
     public static class Message implements IMessageHandler<PacketGuiBattery, IMessage> {
-    @Override
-    public IMessage onMessage(PacketGuiBattery message, MessageContext ctx) {
-    		TileEntity te = ctx.getServerHandler().playerEntity.getEntityWorld().getTileEntity(new BlockPos(x,y,z));
-    		if(te != null) {
-    			TileEntityBattery battery = (TileEntityBattery)te;
-    			battery.STORAGE.setMaxReceive(message.INPUT_PER_TICK);
-    			battery.STORAGE.setMaxExtract(message.OUTPUT_PER_TICK);
-    		}
-		return null;
-    	}
+	    @Override
+	    public IMessage onMessage(PacketGuiBattery message, MessageContext ctx) {
+			TileEntity te = ctx.getServerHandler().player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
+			if(te != null && te instanceof TileEntityBattery) {
+				TileEntityBattery battery = (TileEntityBattery)te;
+				battery.setInputLimit(message.INPUT_PER_TICK);
+				battery.setOutputLimit(message.OUTPUT_PER_TICK);
+			}
+			return null;
+	    }
     }
 }

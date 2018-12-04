@@ -1,69 +1,84 @@
 package theking530.staticpower.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockFarmland;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import theking530.staticpower.assists.Reference;
+import theking530.staticpower.StaticPower;
+import theking530.staticpower.assists.utilities.EnumTextFormatting;
+import theking530.staticpower.assists.utilities.ItemUtilities;
 
-public class AdvancedEarth extends BlockFarmland{
-
-	public static final PropertyInteger MOISTURE = PropertyInteger.create("moisture", 0, 7);
-    protected static final AxisAlignedBB FARMLAND_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.9375D, 1.0D);
-
+public class AdvancedEarth extends BlockFarmland {
+	
     protected AdvancedEarth() {
-        this.setDefaultState(this.blockState.getBaseState().withProperty(MOISTURE, Integer.valueOf(0)));
-        this.setTickRandomly(true);
-        this.setLightOpacity(255);
+        setDefaultState(this.blockState.getBaseState().withProperty(MOISTURE, Integer.valueOf(7)));
+        setTickRandomly(true);
+        setLightOpacity(255);
 		setRegistryName("AdvancedEarth");
-		setUnlocalizedName(Reference.MODID + "_" + "AdvancedEarth");
-    }
+		setCreativeTab(StaticPower.StaticPower);
+		setUnlocalizedName("AdvancedEarth");
 
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return FARMLAND_AABB;
-    }
-    public boolean isOpaqueCube(IBlockState state){
-        return false;
-    }
-    public boolean isFullCube(IBlockState state){
-        return false;
-    }
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        int i = ((Integer)state.getValue(MOISTURE)).intValue();
+		//RegisterHelper.registerItem(new BaseItemBlock(this, "AdvancedEarth"));
     }
     public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance) {
+        entityIn.fall(fallDistance, 1.0F);
     }
-    private boolean hasCrops(World worldIn, BlockPos pos){
-        Block block = worldIn.getBlockState(pos.up()).getBlock();
-        return block instanceof net.minecraftforge.common.IPlantable && canSustainPlant(worldIn.getBlockState(pos), worldIn, pos, net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable)block);
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        worldIn.setBlockState(pos, state.withProperty(MOISTURE, Integer.valueOf(7)), 2);
+        if(worldIn.getBlockState(pos.up()) != null && worldIn.getBlockState(pos.up()).getBlock() instanceof IGrowable) {
+        	IGrowable tempCrop = (IGrowable) worldIn.getBlockState(pos.up()).getBlock();
+        	if(tempCrop.canGrow(worldIn, pos.up(), worldIn.getBlockState(pos.up()), true)) {
+        		worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0.0D, 0.0D, 0.0D, new int[0]);
+        		tempCrop.grow(worldIn, rand, pos.up(), worldIn.getBlockState(pos.up()));
+        	}
+        }
     }
     /**
-     * Get the Item that this Block should drop when harvested.
+     * Called when a neighboring block was changed and marks that this state should perform any checks during a neighbor
+     * change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid
+     * block, etc.
      */
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {}
+    /**
+     * Called after the block is set in the Chunk data, but before the Tile Entity is set
+     */
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {}
+    
     @Nullable
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(ModBlocks.AdvancedEarth);
     }
-
+    @Override
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    	IBlockState state = getStateFromMeta(meta);
+    	return state.withProperty(MOISTURE, Integer.valueOf(7));
+    }
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
         return new ItemStack(Item.getItemFromBlock(ModBlocks.AdvancedEarth));
     }	
+    public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
+    	return true;
+    }
+    
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+    	tooltip.add("This isn't just regular dirt.");
+    	tooltip.add("This is " + EnumTextFormatting.ITALIC + " Advanced " + EnumTextFormatting.REGULAR + " dirt.");
+    	ItemUtilities.formatTooltip(tooltip);
+    }
 }

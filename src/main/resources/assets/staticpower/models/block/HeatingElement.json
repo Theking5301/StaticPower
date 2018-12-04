@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "staticpower:blocks/HeatingElementTop",
+        "front": "staticpower:blocks/HeatingElementSide",
+        "side": "staticpower:blocks/HeatingElementSide"
+    }
+}

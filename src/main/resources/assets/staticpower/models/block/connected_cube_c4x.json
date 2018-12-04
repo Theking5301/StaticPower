@@ -1,0 +1,13 @@
+{
+    "__comment": "Model file for four connected sides in a cross shape.",
+	"parent": "block/cube",
+    "textures": {
+		"particle": "staticpower:blocks/multiblock/connected_cube0C",
+        "down": "staticpower:blocks/multiblock/connected_cube4C",
+		"up": "staticpower:blocks/multiblock/connected_cube4C",
+		"north": "staticpower:blocks/multiblock/connected_cube4C",
+		"south": "staticpower:blocks/multiblock/connected_cube4C",
+		"west": "staticpower:blocks/multiblock/connected_cube4C",
+		"east": "staticpower:blocks/multiblock/connected_cube4C"
+    }
+}

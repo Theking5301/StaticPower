@@ -1,52 +1,60 @@
 package theking530.staticpower.items;
 
-import static theking530.staticpower.assists.RegisterHelper.registerItem;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import theking530.staticpower.assists.RegisterHelper;
+import theking530.staticpower.Registry;
 import theking530.staticpower.assists.Tier;
-import theking530.staticpower.blocks.ModBlocks;
-import theking530.staticpower.items.armor.EnergizedArmor;
-import theking530.staticpower.items.armor.StaticArmor;
 import theking530.staticpower.items.book.StaticPowerBook;
+import theking530.staticpower.items.containers.BaseBattery;
+import theking530.staticpower.items.containers.BaseFluidCapsule;
 import theking530.staticpower.items.itemfilter.FilterTier;
 import theking530.staticpower.items.itemfilter.ItemFilter;
-import theking530.staticpower.items.materials.BaseDust;
-import theking530.staticpower.items.materials.BaseIngot;
-import theking530.staticpower.items.materials.BaseNugget;
+import theking530.staticpower.items.tools.BlockReader;
 import theking530.staticpower.items.tools.CoordinateMarker;
+import theking530.staticpower.items.tools.ElectricSolderingIron;
+import theking530.staticpower.items.tools.MetalHammer;
 import theking530.staticpower.items.tools.SolderingIron;
 import theking530.staticpower.items.tools.StaticWrench;
+import theking530.staticpower.items.tools.WireCutters;
+import theking530.staticpower.items.upgrades.BaseDigistoreCapacityUpgrade;
+import theking530.staticpower.items.upgrades.BaseOutputMultiplierUpgrade;
 import theking530.staticpower.items.upgrades.BasePowerUpgrade;
 import theking530.staticpower.items.upgrades.BaseQuarryingUpgrade;
+import theking530.staticpower.items.upgrades.BaseRangeUpgrade;
 import theking530.staticpower.items.upgrades.BaseSpeedUpgrade;
 import theking530.staticpower.items.upgrades.BaseTankUpgrade;
+import theking530.staticpower.items.upgrades.DigistoreMiscUpgrades;
+import theking530.staticpower.items.upgrades.ExperienceVacuumUpgrade;
+import theking530.staticpower.items.upgrades.TeleportUpgrade;
 
 public class ModItems {
+	public static ItemMaterials Materials;
+	public static FormerMolds FormerMolds;
+	public static MiscItems MiscItems;
+	public static ItemComponents Components;
+	public static BaseDigistoreCapacityUpgrade DigistoreCapacityUpgrade;
+	public static DigistoreMiscUpgrades DigistoreMiscUpgrade;
 	
-	public static ArmorMaterial StaticMaterial = EnumHelper.addArmorMaterial("StaticMaterial", null, 28, new int[] {3, 6, 6, 3}, 25, null, 0);
-	public static ArmorMaterial EnergizedMaterial = EnumHelper.addArmorMaterial("EnergizedMaterial", null, 35, new int[] {5, 10, 8, 7}, 35, null, 0);
+	public static BaseFluidCapsule BaseFluidCapsule;
+	public static BaseFluidCapsule StaticFluidCapsule;
+	public static BaseFluidCapsule EnergizedFluidCapsule;
+	public static BaseFluidCapsule LumumFluidCapsule;
 	
-	public static Item Rubber;
-	public static Item IOPort;
+	public static BaseBattery BasicBattery;
+	public static BaseBattery StaticBattery;
+	public static BaseBattery EnergizedBattery;
+	public static BaseBattery LumumBattery;	
 	
-	public static Item BasicCircuit;
-	public static Item StaticCircuit;
-	public static Item EnergizedCircuit;
-	public static Item LumumCircuit;
-	
+	public static Item TeleportUpgrade;
+	public static Item ExperienceVacuumUpgrade;
 	public static Item BasicSpeedUpgrade;
 	public static Item StaticSpeedUpgrade;
 	public static Item EnergizedSpeedUpgrade;
 	public static Item LumumSpeedUpgrade;
+	
+	public static Item BasicRangeUpgrade;
+	public static Item StaticRangeUpgrade;
+	public static Item EnergizedRangeUpgrade;
+	public static Item LumumRangeUpgrade;
 	
 	public static Item BasicTankUpgrade;
 	public static Item StaticTankUpgrade;
@@ -66,218 +74,122 @@ public class ModItems {
 	public static Item CreativeTankUpgrade;
 	public static Item CreativeSpeedUpgrade;
 	
+	public static Item BasicOutputMultiplierUpgrade;
+	public static Item StaticOutputMultiplierUpgrade;
+	public static Item EnergizedOutputMultiplierUpgrade;
+	public static Item LumumOutputMultiplierUpgrade;
+	
 	public static Item StaticWrench;
 	public static Item SolderingIron;
+	public static Item ElectricSolderingIron;
 	public static Item StaticBook;
 	public static Item CoordinateMarker;
+	public static Item WireCutters;
+	public static Item MetalHammer;
+	public static Item NetworkReader;
 	
 	public static Item BasicItemFilter;
 	public static Item UpgradedItemFilter;
 	public static Item AdvancedItemFilter;
-	public static Item QuarryFilter;
-	
-	public static Item SilverDust;
-	public static Item TinDust;
-	public static Item LeadDust;
-	public static Item CopperDust;
-	public static Item PlatinumDust;
-	public static Item IronDust;
-	public static Item GoldDust;
-	public static Item InertInfusionBlend;
-	public static Item StaticDust;
-	public static Item EnergizedDust;
-	public static Item LumumDust;
-	public static Item RedstoneAlloyDust;
-	
-	public static Item SilverIngot;
-	public static Item TinIngot;
-	public static Item LeadIngot;
-	public static Item CopperIngot;
-	public static Item PlatinumIngot;
-	public static Item InertIngot;
-	public static Item EnergizedIngot;
-	public static Item StaticIngot;
-	public static Item LumumIngot;
-	public static Item RedstoneAlloyIngot;
-	
-	public static Item EnergizedNugget;
-	public static Item StaticNugget;
-	public static Item LumumNugget;
-	
-	public static Item StaticBelt;
-	public static Item EnergizedBelt;
-	public static Item StaticRing;
-	public static Item EnergizedRing;
-	public static Item StaticHelmet;
-	public static Item StaticChestplate;
-	public static Item StaticLeggings;
-	public static Item StaticBoots;
-	public static Item EnergizedHelmet;
-	public static Item EnergizedChestplate;
-	public static Item EnergizedLeggings;
-	public static Item EnergizedBoots;
-	
-	public static Item DepletedCrop;
-	public static Item EnergizedSeeds;
-	public static Item EnergizedCrop;
-	public static Item StaticSeeds;
-	public static Item StaticCrop;
-	public static Item LumumSeeds;
-	public static Item LumumCrop;
-	
-	public static void init() {		
-		
+
+	public static void init(Registry registry) {
+		registry.PreRegisterItem(Materials = new ItemMaterials());
+		registry.PreRegisterItem(MiscItems = new MiscItems());
+		registry.PreRegisterItem(Components = new ItemComponents());
+		registry.PreRegisterItem(FormerMolds = new FormerMolds());
+
 		StaticWrench = new StaticWrench().setUnlocalizedName("StaticWrench");
-		RegisterHelper.registerItem(StaticWrench);
-		SolderingIron = new SolderingIron("SolderingIron", 10);
-		RegisterHelper.registerItem(SolderingIron);
+		registry.PreRegisterItem(StaticWrench);
+		SolderingIron = new SolderingIron("SolderingIron", 20);
+		registry.PreRegisterItem(SolderingIron);
+		ElectricSolderingIron = new ElectricSolderingIron("ElectricSolderingIron", 50000);
+		registry.PreRegisterItem(ElectricSolderingIron);
 		CoordinateMarker = new CoordinateMarker("CoordinateMarker");
-		RegisterHelper.registerItem(CoordinateMarker);
+		registry.PreRegisterItem(CoordinateMarker);
+		WireCutters = new WireCutters(64);
+		registry.PreRegisterItem(WireCutters);
+		MetalHammer = new MetalHammer(64);
+		registry.PreRegisterItem(MetalHammer);
 		
+		NetworkReader = new BlockReader("NetworkReader");
+		registry.PreRegisterItem(NetworkReader);
 		BasicItemFilter = new ItemFilter("BasicItemFilter", FilterTier.BASIC);
-		RegisterHelper.registerItem(BasicItemFilter);
+		registry.PreRegisterItem(BasicItemFilter);
 		UpgradedItemFilter = new ItemFilter("UpgradedItemFilter", FilterTier.UPGRADED);
-		RegisterHelper.registerItem(UpgradedItemFilter);
+		registry.PreRegisterItem(UpgradedItemFilter);
 		AdvancedItemFilter = new ItemFilter("AdvancedItemFilter", FilterTier.ADVANCED);
-		RegisterHelper.registerItem(AdvancedItemFilter);
+		registry.PreRegisterItem(AdvancedItemFilter);
+
+		BasicBattery = new BaseBattery("BasicPortableBattery", Tier.BASIC.getPortableBatteryCapacity());
+		registry.PreRegisterItem(BasicBattery);
+		StaticBattery = new BaseBattery("StaticPortableBattery", Tier.STATIC.getPortableBatteryCapacity());
+		registry.PreRegisterItem(StaticBattery);
+		EnergizedBattery = new BaseBattery("EnergizedPortableBattery", Tier.ENERGIZED.getPortableBatteryCapacity());
+		registry.PreRegisterItem(EnergizedBattery);
+		LumumBattery = new BaseBattery("LumumPortableBattery", Tier.LUMUM.getPortableBatteryCapacity());
+		registry.PreRegisterItem(LumumBattery);
 		
-		Rubber = new ItemBase("Rubber");
-		RegisterHelper.registerItem(Rubber);
-		DepletedCrop = new DepletedCrop("DepletedCrop");
-		RegisterHelper.registerItem(DepletedCrop);
-		IOPort = new ItemBase("IOPort");
-		RegisterHelper.registerItem(IOPort);
-		
-		StaticHelmet = new StaticArmor("StaticHelmet", StaticMaterial, "StaticHelmet", EntityEquipmentSlot.HEAD).setUnlocalizedName("StaticHelmet");
-		RegisterHelper.registerItem(StaticHelmet);	
-		StaticChestplate = new StaticArmor("StaticChestplate", StaticMaterial, "StaticChestplate", EntityEquipmentSlot.CHEST).setUnlocalizedName("StaticChestplate");
-		RegisterHelper.registerItem(StaticChestplate);		
-		StaticLeggings = new StaticArmor("StaticLeggings", StaticMaterial, "StaticLeggings", EntityEquipmentSlot.LEGS).setUnlocalizedName("StaticLeggings");
-		RegisterHelper.registerItem(StaticLeggings);		
-		StaticBoots = new StaticArmor("StaticBoots", StaticMaterial, "StaticBoots", EntityEquipmentSlot.FEET).setUnlocalizedName("StaticBoots");
-		RegisterHelper.registerItem(StaticBoots);
-		
-		EnergizedHelmet = new EnergizedArmor("EnergizedHelmet", EnergizedMaterial, "EnergizedHelmet", EntityEquipmentSlot.HEAD).setUnlocalizedName("EnergizedHelmet");
-		RegisterHelper.registerItem(EnergizedHelmet);		
-		EnergizedChestplate = new EnergizedArmor("EnergizedChestplate", EnergizedMaterial, "EnergizedChestplate", EntityEquipmentSlot.CHEST).setUnlocalizedName("EnergizedChestplate");
-		RegisterHelper.registerItem(EnergizedChestplate);		
-		EnergizedLeggings = new EnergizedArmor("EnergizedLeggings", EnergizedMaterial, "EnergizedLeggings", EntityEquipmentSlot.LEGS).setUnlocalizedName("EnergizedLeggings");
-		RegisterHelper.registerItem(EnergizedLeggings);		
-		EnergizedBoots = new EnergizedArmor("EnergizedBoots", EnergizedMaterial, "EnergizedBoots", EntityEquipmentSlot.FEET).setUnlocalizedName("EnergizedBoots");
-		RegisterHelper.registerItem(EnergizedBoots);
-		
-		//EnergizedBelt = new EnergizedBelt(baubles.api.BaubleType.BELT).setUnlocalizedName("EnergizedBelt");
-		//RegisterHelper.registerItem(EnergizedBelt);		
-		
-		BasicCircuit = new ItemBase("BasicCircuit");
-		RegisterHelper.registerItem(BasicCircuit);
-		StaticCircuit = new ItemBase("StaticCircuit");
-		RegisterHelper.registerItem(StaticCircuit);
-		EnergizedCircuit = new ItemBase("EnergizedCircuit");
-		RegisterHelper.registerItem(EnergizedCircuit);
-		LumumCircuit = new ItemBase("LumumCircuit");
-		RegisterHelper.registerItem(LumumCircuit);
-		
+		registry.PreRegisterItem(StaticBook = new StaticPowerBook("StaticBook"));	
+				
 		CreativeSpeedUpgrade = new BaseSpeedUpgrade("CreativeSpeedUpgrade", Tier.CREATIVE);
-		RegisterHelper.registerItem(CreativeSpeedUpgrade);	
+		registry.PreRegisterItem(CreativeSpeedUpgrade);	
 		/**
 		CreativeTankUpgrade = new BaseTankUpgrade("CreativeTankUpgrade", Tier.CREATIVE);
-		RegisterHelper.registerItem(CreativeTankUpgrade);	
+		registry.PreRegisterItem(CreativeTankUpgrade);	
 		CreativeSpeedUpgrade = new BasePowerUpgrade("CreativeSpeedUpgrade", Tier.CREATIVE);
-		RegisterHelper.registerItem(CreativeSpeedUpgrade);
+		registry.PreRegisterItem(CreativeSpeedUpgrade);
 		*/
 		
-		BasicSpeedUpgrade = new BaseSpeedUpgrade("BasicSpeedUpgrade", Tier.BASE);
-		RegisterHelper.registerItem(BasicSpeedUpgrade);	
+		registry.PreRegisterItem(TeleportUpgrade = new TeleportUpgrade("TeleportUpgrade"));
+		registry.PreRegisterItem(ExperienceVacuumUpgrade = new ExperienceVacuumUpgrade("ExperienceVacuumUpgrade"));
+		
+		BasicSpeedUpgrade = new BaseSpeedUpgrade("BasicSpeedUpgrade", Tier.BASIC);
+		registry.PreRegisterItem(BasicSpeedUpgrade);	
 		StaticSpeedUpgrade = new BaseSpeedUpgrade("StaticSpeedUpgrade", Tier.STATIC);
-		RegisterHelper.registerItem(StaticSpeedUpgrade);	
+		registry.PreRegisterItem(StaticSpeedUpgrade);	
 		EnergizedSpeedUpgrade = new BaseSpeedUpgrade("EnergizedSpeedUpgrade", Tier.ENERGIZED);
-		RegisterHelper.registerItem(EnergizedSpeedUpgrade);	
+		registry.PreRegisterItem(EnergizedSpeedUpgrade);	
 		LumumSpeedUpgrade = new BaseSpeedUpgrade("LumumSpeedUpgrade", Tier.LUMUM);
-		RegisterHelper.registerItem(LumumSpeedUpgrade);	
+		registry.PreRegisterItem(LumumSpeedUpgrade);	
 		
-		BasicTankUpgrade = new BaseTankUpgrade("BasicTankUpgrade", Tier.BASE);
-		RegisterHelper.registerItem(BasicTankUpgrade);	
+		BasicTankUpgrade = new BaseTankUpgrade("BasicTankUpgrade", Tier.BASIC);
+		registry.PreRegisterItem(BasicTankUpgrade);	
 		StaticTankUpgrade = new BaseTankUpgrade("StaticTankUpgrade", Tier.STATIC);
-		RegisterHelper.registerItem(StaticTankUpgrade);	
+		registry.PreRegisterItem(StaticTankUpgrade);	
 		EnergizedTankUpgrade = new BaseTankUpgrade("EnergizedTankUpgrade", Tier.ENERGIZED);
-		RegisterHelper.registerItem(EnergizedTankUpgrade);	
+		registry.PreRegisterItem(EnergizedTankUpgrade);	
 		LumumTankUpgrade = new BaseTankUpgrade("LumumTankUpgrade", Tier.LUMUM);
-		RegisterHelper.registerItem(LumumTankUpgrade);	
+		registry.PreRegisterItem(LumumTankUpgrade);	
 		
-		BasicPowerUpgrade = new BasePowerUpgrade("BasicPowerUpgrade", Tier.BASE);
-		RegisterHelper.registerItem(BasicPowerUpgrade);
-		StaticPowerUpgrade = new BasePowerUpgrade("StaticPowerUpgrade", Tier.STATIC);
-		RegisterHelper.registerItem(StaticPowerUpgrade);
-		EnergizedPowerUpgrade = new BasePowerUpgrade("EnergizedPowerUpgrade", Tier.ENERGIZED);
-		RegisterHelper.registerItem(EnergizedPowerUpgrade);
-		LumumPowerUpgrade = new BasePowerUpgrade("LumumPowerUpgrade", Tier.LUMUM);
-		RegisterHelper.registerItem(LumumPowerUpgrade);
+		registry.PreRegisterItem(BasicPowerUpgrade = new BasePowerUpgrade("BasicPowerUpgrade", Tier.BASIC));
+		registry.PreRegisterItem(StaticPowerUpgrade = new BasePowerUpgrade("StaticPowerUpgrade", Tier.STATIC));
+		registry.PreRegisterItem(EnergizedPowerUpgrade = new BasePowerUpgrade("EnergizedPowerUpgrade", Tier.ENERGIZED));
+		registry.PreRegisterItem(LumumPowerUpgrade = new BasePowerUpgrade("LumumPowerUpgrade", Tier.LUMUM));
 		
-		StaticQuarryingUpgrade = new BaseQuarryingUpgrade("StaticQuarryingUpgrade", Tier.STATIC);
-		RegisterHelper.registerItem(StaticQuarryingUpgrade);	
-		EnergizedQuarryingUpgrade = new BaseQuarryingUpgrade("EnergizedQuarryingUpgrade", Tier.ENERGIZED);
-		RegisterHelper.registerItem(EnergizedQuarryingUpgrade);	
-		LumumQuarryingUpgrade = new BaseQuarryingUpgrade("LumumQuarryingUpgrade", Tier.LUMUM);
-		RegisterHelper.registerItem(LumumQuarryingUpgrade);	
-		
-		StaticSeeds = new StaticSeeds(ModBlocks.StaticCropPlant, Blocks.FARMLAND).setUnlocalizedName("StaticSeeds");
-		RegisterHelper.registerItem(StaticSeeds);	
-		MinecraftForge.addGrassSeed(new ItemStack(StaticSeeds), 20);		
-		EnergizedSeeds = new EnergizedSeeds(ModBlocks.EnergizedCropPlant, Blocks.FARMLAND).setUnlocalizedName("EnergizedSeeds");
-		RegisterHelper.registerItem(EnergizedSeeds);			
-		LumumSeeds = new LumumSeeds(ModBlocks.LumumCropPlant, Blocks.FARMLAND).setUnlocalizedName("LumumSeeds");
-		RegisterHelper.registerItem(LumumSeeds);	
-		
-		StaticCrop = new StaticCrop().setUnlocalizedName("StaticCrop");
-		RegisterHelper.registerItem(StaticCrop);			
-		EnergizedCrop = new EnergizedCrop().setUnlocalizedName("EnergizedCrop");
-		RegisterHelper.registerItem(EnergizedCrop);			
-		LumumCrop = new LumumCrop().setUnlocalizedName("LumumCrop");
-		registerItem(LumumCrop);	
+		registry.PreRegisterItem(StaticQuarryingUpgrade = new BaseQuarryingUpgrade("StaticQuarryingUpgrade", Tier.STATIC));	
+		registry.PreRegisterItem(EnergizedQuarryingUpgrade = new BaseQuarryingUpgrade("EnergizedQuarryingUpgrade", Tier.ENERGIZED));	
+		registry.PreRegisterItem(LumumQuarryingUpgrade = new BaseQuarryingUpgrade("LumumQuarryingUpgrade", Tier.LUMUM));	
 
-		StaticBook = new StaticPowerBook("StaticBook");
-		registerItem(StaticBook);	
+		registry.PreRegisterItem(BasicRangeUpgrade = new BaseRangeUpgrade("BasicRangeUpgrade", Tier.BASIC));	
+		registry.PreRegisterItem(StaticRangeUpgrade = new BaseRangeUpgrade("StaticRangeUpgrade", Tier.STATIC));	
+		registry.PreRegisterItem(EnergizedRangeUpgrade = new BaseRangeUpgrade("EnergizedRangeUpgrade", Tier.ENERGIZED));	
+		registry.PreRegisterItem(LumumRangeUpgrade = new BaseRangeUpgrade("LumumRangeUpgrade", Tier.LUMUM));	
 		
-		GameRegistry.register(StaticIngot = new BaseIngot("StaticIngot"));
-		GameRegistry.register(EnergizedIngot = new BaseIngot("EnergizedIngot"));
-		GameRegistry.register(LumumIngot = new BaseIngot("LumumIngot"));
-		GameRegistry.register(SilverIngot = new BaseIngot("SilverIngot"));
-		GameRegistry.register(TinIngot = new BaseIngot("TinIngot"));
-		GameRegistry.register(LeadIngot = new BaseIngot("LeadIngot"));
-		GameRegistry.register(CopperIngot = new BaseIngot("CopperIngot"));
-		GameRegistry.register(PlatinumIngot = new BaseIngot("PlatinumIngot"));
-		GameRegistry.register(InertIngot = new BaseIngot("InertIngot"));
-		GameRegistry.register(RedstoneAlloyIngot = new BaseIngot("RedstoneAlloyIngot"));
-		OreDictionary.registerOre("ingotSilver", new ItemStack(SilverIngot));
-		OreDictionary.registerOre("ingotTin", new ItemStack(TinIngot));
-		OreDictionary.registerOre("ingotLead", new ItemStack(LeadIngot));
-		OreDictionary.registerOre("ingotCopper", new ItemStack(CopperIngot));
-		OreDictionary.registerOre("ingotPlatinum", new ItemStack(PlatinumIngot));
+		registry.PreRegisterItem(BasicOutputMultiplierUpgrade = new BaseOutputMultiplierUpgrade("BasicOutputMultiplierUpgrade", Tier.BASIC));	
+		registry.PreRegisterItem(StaticOutputMultiplierUpgrade = new BaseOutputMultiplierUpgrade("StaticOutputMultiplierUpgrade", Tier.STATIC));	
+		registry.PreRegisterItem(EnergizedOutputMultiplierUpgrade = new BaseOutputMultiplierUpgrade("EnergizedOutputMultiplierUpgrade", Tier.ENERGIZED));	
+		registry.PreRegisterItem(LumumOutputMultiplierUpgrade = new BaseOutputMultiplierUpgrade("LumumOutputMultiplierUpgrade", Tier.LUMUM));	
 		
-		GameRegistry.register(StaticNugget = new BaseNugget("StaticNugget"));
-		GameRegistry.register(EnergizedNugget = new BaseNugget("EnergizedNugget"));
-		GameRegistry.register(LumumNugget = new BaseNugget("LumumNugget"));
+		registry.PreRegisterItem(DigistoreCapacityUpgrade = new BaseDigistoreCapacityUpgrade("DigistoreCapacityUpgrade"));
+		registry.PreRegisterItem(DigistoreMiscUpgrade = new DigistoreMiscUpgrades("DigistoreMiscUpgrade"));
 		
-		GameRegistry.register(SilverDust = new BaseDust("SilverDust"));
-		GameRegistry.register(TinDust = new BaseDust("TinDust"));
-		GameRegistry.register(LeadDust = new BaseDust("LeadDust"));
-		GameRegistry.register(CopperDust = new BaseDust("CopperDust"));
-		GameRegistry.register(PlatinumDust = new BaseDust("PlatinumDust"));
-		GameRegistry.register(IronDust = new BaseDust("IronDust"));
-		GameRegistry.register(GoldDust = new BaseDust("GoldDust"));
-		GameRegistry.register(InertInfusionBlend = new BaseDust("InertInfusionBlend"));
-		GameRegistry.register(StaticDust = new BaseDust("StaticDust"));
-		GameRegistry.register(EnergizedDust = new BaseDust("EnergizedDust"));
-		GameRegistry.register(LumumDust = new BaseDust("LumumDust"));
-		GameRegistry.register(RedstoneAlloyDust = new BaseDust("RedstoneAlloyDust"));
-		OreDictionary.registerOre("dustSilver", new ItemStack(SilverDust));
-		OreDictionary.registerOre("dustTin", new ItemStack(TinDust));
-		OreDictionary.registerOre("dustLead", new ItemStack(LeadDust));
-		OreDictionary.registerOre("dustCopper", new ItemStack(CopperDust));
-		OreDictionary.registerOre("dustPlatinum", new ItemStack(PlatinumDust));
-		OreDictionary.registerOre("dustIron", new ItemStack(IronDust));
-		OreDictionary.registerOre("dustGold", new ItemStack(GoldDust));
+		BaseFluidCapsule = new BaseFluidCapsule("BaseFluidCapsule", Tier.BASIC.getFluidCanisterCapacity());
+		registry.PreRegisterItem(BaseFluidCapsule);
+		StaticFluidCapsule = new BaseFluidCapsule("StaticFluidCapsule", Tier.STATIC.getFluidCanisterCapacity());
+		registry.PreRegisterItem(StaticFluidCapsule);
+		EnergizedFluidCapsule = new BaseFluidCapsule("EnergizedFluidCapsule", Tier.ENERGIZED.getFluidCanisterCapacity());
+		registry.PreRegisterItem(EnergizedFluidCapsule);
+		LumumFluidCapsule = new BaseFluidCapsule("LumumFluidCapsule", Tier.LUMUM.getFluidCanisterCapacity());
+		registry.PreRegisterItem(LumumFluidCapsule);
 	}
-
 }

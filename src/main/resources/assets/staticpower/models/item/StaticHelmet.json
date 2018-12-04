@@ -1,7 +1,7 @@
 {
-	"parent": "builtin/generated",
+	"parent": "item/generated",
 	"textures": {
-		"layer0": "staticpower:items/StaticHelmet"
+		"layer0": "staticpower:items/armour/StaticHelmet"
 	},
 	"display": {
 		"thirdperson": {

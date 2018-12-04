@@ -2,6 +2,9 @@ package theking530.staticpower.items.tools;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,9 +16,9 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import theking530.staticpower.assists.utilities.EnumTextFormatting;
+import theking530.staticpower.assists.utilities.WorldUtilities;
 import theking530.staticpower.items.ItemBase;
-import theking530.staticpower.utils.EnumTextFormatting;
-import theking530.staticpower.utils.WorldUtilities;
 
 public class CoordinateMarker extends ItemBase {
 
@@ -23,7 +26,8 @@ public class CoordinateMarker extends ItemBase {
 		super(name);
 	}
 	@Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+        public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
 		if(!world.isRemote) {
 			if(!player.isSneaking()) {
 				if(itemStack.hasTagCompound()) {
@@ -33,27 +37,27 @@ public class CoordinateMarker extends ItemBase {
 						nbt.setIntArray("POS1", itemStack.getTagCompound().getIntArray("POS1"));
 						nbt.setIntArray("POS2", new int[] {pos.getX(), pos.getY(), pos.getZ()});
 						itemStack.setTagCompound(nbt);
-						player.addChatComponentMessage(new TextComponentString("Position " + EnumTextFormatting.GREEN + "Two Set!"));
+						player.sendMessage(new TextComponentString("Position " + EnumTextFormatting.GREEN + "Two Set!"));
 					}else{
 						NBTTagCompound nbt = new NBTTagCompound();
 						BlockPos pos = player.getPosition();
 						nbt.setIntArray("POS1", new int[] {pos.getX(), pos.getY(), pos.getZ()});	
 						itemStack.setTagCompound(nbt);
-						player.addChatComponentMessage(new TextComponentString("Position " + EnumTextFormatting.AQUA + "One Set!"));	
+						player.sendMessage(new TextComponentString("Position " + EnumTextFormatting.AQUA + "One Set!"));	
 					}
 				}else{
 					NBTTagCompound nbt = new NBTTagCompound();
 					BlockPos pos = player.getPosition();
 					nbt.setIntArray("POS1", new int[] {pos.getX(), pos.getY(), pos.getZ()});	
 					itemStack.setTagCompound(nbt);
-					player.addChatComponentMessage(new TextComponentString("Position " + EnumTextFormatting.AQUA + "One Set!"));
+					player.sendMessage(new TextComponentString("Position " + EnumTextFormatting.AQUA + "One Set!"));
 				}
 			}else{
 				itemStack.setTagCompound(null);			
-				player.addChatComponentMessage(new TextComponentString(EnumTextFormatting.RED + "Positions Cleared!"));
+				player.sendMessage(new TextComponentString(EnumTextFormatting.RED + "Positions Cleared!"));
 			}
 	    }	
-		return new ActionResult(EnumActionResult.PASS, itemStack);    
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);    
 	}
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int par4, boolean par5) {
     	if(entity instanceof EntityPlayer) {
@@ -83,7 +87,7 @@ public class CoordinateMarker extends ItemBase {
     	}
     }
 	@Override  
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean par4) {
+		public void addInformation(ItemStack itemstack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
     	if(showHiddenTooltips()) {
     		String pos1 = "Empty";
     		String pos2 = "Empty";

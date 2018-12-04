@@ -1,6 +1,8 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/orientable",
     "textures": {
-        "all": "staticpower:blocks/MachineBlock"
+        "top": "staticpower:blocks/machine_block_top",
+        "front": "staticpower:blocks/machine_block",
+        "side": "staticpower:blocks/machine_block"
     }
 }

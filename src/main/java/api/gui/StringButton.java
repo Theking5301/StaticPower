@@ -9,15 +9,15 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import theking530.staticpower.assists.Reference;
+import theking530.staticpower.assists.utilities.StaticVertexBuffer;
 import theking530.staticpower.client.gui.widgets.GuiDrawItem;
-import theking530.staticpower.utils.StaticVertexBuffer;
 
 public class StringButton extends Gui implements MouseListener{
 	
@@ -39,8 +39,8 @@ public class StringButton extends Gui implements MouseListener{
 	public boolean IS_VISIBLE = true;
 	public boolean CLICKED = false;
 	
-	private ResourceLocation base = new ResourceLocation(Reference.MODID + ":" + "/textures/gui/Button.png");
-	private ResourceLocation hover = new ResourceLocation(Reference.MODID + ":" + "/textures/gui/ButtonHover.png");
+	private ResourceLocation base = new ResourceLocation(Reference.MOD_ID + ":" + "/textures/gui/Button.png");
+	private ResourceLocation hover = new ResourceLocation(Reference.MOD_ID + ":" + "/textures/gui/ButtonHover.png");
 	
 	public StringButton(int guiLeft, int guiTop, int width, int height, int xPos, int yPos, Block block) {
 		this.GUI_LEFT = guiLeft;
@@ -80,7 +80,7 @@ public class StringButton extends Gui implements MouseListener{
 		int buttonTop = GUI_TOP + k + BUTTON_YPOS;
 		
 		Item item = Item.getItemFromBlock(BLOCK);
-		GuiDrawItem.drawItem(item, buttonLeft, buttonTop, 1, -2, this.zLevel);
+		GuiDrawItem.drawItem(item, buttonLeft, buttonTop, 1, -2, this.zLevel, 1.0f);
 	}
 	public void drawButtonBase() {
 		int j = (WIDTH - xSIZE) / 2;
@@ -89,7 +89,7 @@ public class StringButton extends Gui implements MouseListener{
 		int buttonTop = GUI_TOP + k + BUTTON_YPOS;
 		GL11.glDisable(GL11.GL_LIGHTING);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer tes = tessellator.getBuffer();
+        BufferBuilder tes = tessellator.getBuffer();
         tes.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
 		if(CLICKED == true || HIGHLIGHT == true) {
@@ -135,7 +135,6 @@ public class StringButton extends Gui implements MouseListener{
     	//soundHandler.playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
     }
 	public void buttonMouseClick(int par1, int par2, int button) {
-		int i = 0;
 		int j = (WIDTH - xSIZE) / 2;
 		int k = (HEIGHT - ySIZE) / 2;
 		if(par1 > j + BUTTON_XPOS && par1 < j + BUTTON_XPOS + 24) {

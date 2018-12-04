@@ -16,17 +16,17 @@ public class StaticPowerBook extends ItemBase{
 	public StaticPowerBook(String name) {
 		super(name);
 	}
-	/**
+
 	@Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote) {
-			return new ActionResult(EnumActionResult.PASS, itemStack);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+	ItemStack itemStack = player.getHeldItem(hand);
+		if (world.isRemote) {
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
 		}else if (!player.isSneaking()) {
 			FMLNetworkHandler.openGui(player, StaticPower.staticpower, GuiIDRegistry.guiIDStaticBook, world, 0, 0, 0);
-			return new ActionResult(EnumActionResult.SUCCESS, itemStack);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
 		}else{
-			return new ActionResult(EnumActionResult.FAIL, itemStack);
-		}       
+			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack);
+		}    
     }
-    */
 }

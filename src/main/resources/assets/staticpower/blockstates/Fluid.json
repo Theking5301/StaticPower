@@ -1,0 +1,49 @@
+{
+    "forge_marker": 1,
+	"variants": {
+        "staticfluid": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "staticfluid" }
+        },
+		"energizedfluid": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "energizedfluid" }
+        },
+		"lumumfluid": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "lumumfluid" }
+        },
+		"ethanol": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "ethanol" }
+        },
+		"mash": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "mash" }
+        },
+		"evaporatedmash": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "evaporatedmash" }
+        },
+		"steam": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "steam" }
+        },
+		"refinedfluid": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "refinedfluid" }
+        },
+		"liquidexperience": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "liquidexperience" }
+        },
+		"treesap": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "treesap" }
+        },
+		"treeoil": {
+            "model": "forge:fluid",
+            "custom": { "fluid": "treeoil" }
+        }
+    }
+}

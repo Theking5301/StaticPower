@@ -4,188 +4,227 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import theking530.staticpower.assists.RegisterHelper;
-import theking530.staticpower.handlers.crafting.wrappers.GrinderOutputWrapper;
+import theking530.staticpower.handlers.crafting.Craft;
 import theking530.staticpower.handlers.crafting.wrappers.GrinderOutputWrapper.GrinderOutput;
-import theking530.staticpower.items.ModItems;
+import theking530.staticpower.items.ItemMaterials;
+import theking530.staticpower.items.MiscItems;
 
 public class GrinderRecipes {
 
-	public static void registerGrinderRecipe() {
-		for(int index = 0; index < OreDictionary.getOres("oreCopper").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("oreCopper").get(index), newOutput(new ItemStack(ModItems.CopperDust, 2), 1.0f), newOutput(new ItemStack(ModItems.GoldDust, 1), 0.1f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("oreSilver").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("oreSilver").get(index), newOutput(new ItemStack(ModItems.SilverDust, 2), 1.0f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("oreTin").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("oreTin").get(index), newOutput(new ItemStack(ModItems.TinDust, 2), 1.0f), newOutput(new ItemStack(ModItems.SilverDust, 1), 0.1f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("oreLead").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("oreLead").get(index), newOutput(new ItemStack(ModItems.LeadDust, 2), 1.0f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("orePlatinum").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("orePlatinum").get(index), newOutput(new ItemStack(ModItems.PlatinumDust, 2), 1.0f));
-		}
-		oreDictionaryRecipe("Aluminium", 2);
-		oreDictionaryRecipe("Nickel", 2);
-		oreDictionaryRecipe("Manganese", 2);
-		oreDictionaryRecipe("Mithril", 2);
-		oreDictionaryRecipe("Zinc", 2);
-		oreDictionaryRecipe("Adamantine", 2);
-		oreDictionaryRecipe("Alduorite", 2);
-		oreDictionaryRecipe("AstralSilver", 2);
-		oreDictionaryRecipe("Atlarus", 2);
-		oreDictionaryRecipe("Carmot", 2);
-		oreDictionaryRecipe("Ceruclase", 2);
-		oreDictionaryRecipe("DeepIron", 2);
-		oreDictionaryRecipe("Eximite", 2);
-		oreDictionaryRecipe("Ignatius", 2);
-		oreDictionaryRecipe("Infuscolium", 2);
-		oreDictionaryRecipe("Kalendrite", 2);
-		oreDictionaryRecipe("Lemurite", 2);
-		oreDictionaryRecipe("Magnesium", 2);
-		oreDictionaryRecipe("Meutoite", 2);
-		oreDictionaryRecipe("Midasium", 2);
-		oreDictionaryRecipe("Orichalcum", 2);
-		oreDictionaryRecipe("Oureclase", 2);
-		oreDictionaryRecipe("Prometheum", 2);
-		oreDictionaryRecipe("Rubracium", 2);
-		oreDictionaryRecipe("Sanguinite", 2);
-		oreDictionaryRecipe("ShadowIron", 2);
-		oreDictionaryRecipe("Vulcanite", 2);
-		oreDictionaryRecipe("Vyroxeres", 2);
+	public static void registerGrinderRecipes() {
+		registerIngotToDustRecipes();
+		registerOreToDustRecipes();
 		
-		ingotDictionaryRecipe("Bronze", 1);
-		oreDictionaryOutput(new ItemStack(Item.getItemFromBlock(Blocks.OBSIDIAN)), "dustObsidian", 8);
-		if(OreDictionary.getOres("dustNickel").size() > 0) {
-			RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.IRON_ORE)),  newOutput(new ItemStack(ModItems.IronDust, 2), 1.0f), newOutput(new ItemStack(OreDictionary.getOres("dustNickel").get(0).getItem(), 1), 0.1f));	
-		}else{
-			RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.IRON_ORE)),  newOutput(new ItemStack(ModItems.IronDust, 2), 0.1f));	
-		}
+		//Overrides
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.WHEAT),  new GrinderOutput(Craft.outputStack(MiscItems.wheatFlour, 2)),  new GrinderOutput(Craft.outputStack(MiscItems.wheatFlour), 0.15f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.POTATO),  new GrinderOutput(Craft.outputStack(MiscItems.potatoFlour, 2)),  new GrinderOutput(Craft.outputStack(MiscItems.potatoFlour), 0.15f));	
+
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreCopper"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustCopper, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.dustGold, 1), 0.05f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreSilver"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustSilver, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.dustTin, 1), 0.05f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreTin"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustTin, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.dustSilver, 1), 0.05f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreLead"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustLead, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.gemRuby, 1), 0.02f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("orePlatinum"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustPlatinum, 2)), new GrinderOutput(new ItemStack(Items.DIAMOND, 1), 0.01f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreNickel"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustNickel, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.dustPlatinum, 1), 0.01f));	
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreAluminium"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustAluminium, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.gemSapphire, 1), 0.02f));	
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreAluminum"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustAluminium, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.gemSapphire, 1), 0.02f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreIron"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustIron, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.dustNickel, 1), 0.05f));			
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreGold"), new GrinderOutput(Craft.outputStack(ItemMaterials.dustGold, 2)), new GrinderOutput(Craft.outputStack(ItemMaterials.dustCopper, 1), 0.05f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreRuby"), new GrinderOutput(Craft.outputStack(ItemMaterials.gemRuby, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("oreSapphire"), new GrinderOutput(Craft.outputStack(ItemMaterials.gemSapphire, 3)));
+
+		RegisterHelper.registerGrinderRecipe(Craft.ing(ItemMaterials.ingotStatic),  new GrinderOutput(Craft.outputStack(ItemMaterials.dustStatic, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(ItemMaterials.ingotEnergized),  new GrinderOutput(Craft.outputStack(ItemMaterials.dustEnergized, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(ItemMaterials.ingotLumum),  new GrinderOutput(Craft.outputStack(ItemMaterials.dustLumum, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(ItemMaterials.ingotInertInfusion),  new GrinderOutput(Craft.outputStack(ItemMaterials.dustInertInfusion, 1)));		
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.IRON_INGOT), new GrinderOutput(Craft.outputStack(ItemMaterials.dustIron, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.GOLD_INGOT), new GrinderOutput(Craft.outputStack(ItemMaterials.dustGold, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(ItemMaterials.ingotRedstoneAlloy), new GrinderOutput(Craft.outputStack(ItemMaterials.dustRedstoneAlloy, 1)));
 		
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.GOLD_ORE)),  newOutput(new ItemStack(ModItems.GoldDust, 2), 1.0f), newOutput(new ItemStack(Items.REDSTONE, 2), 0.1f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.COAL_ORE)),  newOutput(new ItemStack(Items.COAL, 4), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.REDSTONE_ORE)),  newOutput(new ItemStack(Items.REDSTONE, 5), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.DIAMOND_ORE)),  newOutput(new ItemStack(Items.DIAMOND, 3), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.EMERALD_ORE)),  newOutput(new ItemStack(Items.EMERALD, 3), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.QUARTZ_ORE)),  newOutput(new ItemStack(Items.QUARTZ, 4), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.LAPIS_ORE)),  newOutput(new ItemStack(Items.DYE, 4, 4), 1.0f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("gemRuby"), new GrinderOutput(ItemMaterials.dustRuby));
+		RegisterHelper.registerGrinderRecipe(Craft.ing("gemSapphire"), new GrinderOutput(ItemMaterials.dustSapphire));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Items.COAL, 1, 0)), new GrinderOutput(ItemMaterials.dustCoal));	
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Items.COAL, 1, 1)), new GrinderOutput(ItemMaterials.dustCharcoal));	
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.OBSIDIAN), new GrinderOutput(Craft.outputStack(ItemMaterials.dustObsidian, 8), 1.0f));	
+		
+		
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.COAL_ORE),  new GrinderOutput(new ItemStack(Items.COAL, 4)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.REDSTONE_ORE),  new GrinderOutput(new ItemStack(Items.REDSTONE, 5)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.DIAMOND_ORE),  new GrinderOutput(new ItemStack(Items.DIAMOND, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.EMERALD_ORE),  new GrinderOutput(new ItemStack(Items.EMERALD, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.QUARTZ_ORE),  new GrinderOutput(new ItemStack(Items.QUARTZ, 4)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.LAPIS_ORE),  new GrinderOutput(new ItemStack(Items.DYE, 4, 4)));
+		
+
+		for (int meta = 1; meta < 16; meta++) {
+			RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.WOOL, 1, meta)), new GrinderOutput(new ItemStack(Items.STRING, 4)), new GrinderOutput(new ItemStack(Blocks.WOOL), 0.01f), new GrinderOutput(new ItemStack(Items.DYE, 1, 15 - meta), 0.5f));
+		}
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.WOOL, 0)), new GrinderOutput(new ItemStack(Items.STRING, 4)), new GrinderOutput(new ItemStack(Blocks.WOOL), 0.01f));
+		
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.YELLOW_FLOWER)), new GrinderOutput(new ItemStack(Items.DYE, 4, 11)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 0)), new GrinderOutput(new ItemStack(Items.DYE, 4, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 1)), new GrinderOutput(new ItemStack(Items.DYE, 4, 12)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 2)), new GrinderOutput(new ItemStack(Items.DYE, 4, 13)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 3)), new GrinderOutput(new ItemStack(Items.DYE, 4, 7)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 4)), new GrinderOutput(new ItemStack(Items.DYE, 4, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 5)), new GrinderOutput(new ItemStack(Items.DYE, 4, 14)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 6)), new GrinderOutput(new ItemStack(Items.DYE, 4, 7)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 7)), new GrinderOutput(new ItemStack(Items.DYE, 4, 9)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_FLOWER, 1, 8)), new GrinderOutput(new ItemStack(Items.DYE, 4, 7)));
+
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.DOUBLE_PLANT, 1, 0)), new GrinderOutput(new ItemStack(Items.DYE, 4, 11)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.DOUBLE_PLANT, 1, 1)), new GrinderOutput(new ItemStack(Items.DYE, 4, 13)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.DOUBLE_PLANT, 1, 4)), new GrinderOutput(new ItemStack(Items.DYE, 4, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.DOUBLE_PLANT, 1, 5)), new GrinderOutput(new ItemStack(Items.DYE, 4, 9)));
 		
 		//Items
-		oreDictionaryRecipe("Sulfur", 4);
-		oreDictionaryRecipe("Saltpeter", 4);
-		oreDictionaryRecipe("Potash", 4);
-		oreDictionaryRecipe("Bitumen", 4);
-		oreDictionaryRecipe("Salt", 4);
-		if(OreDictionary.getOres("dustCoal").size() > 0) {
-			RegisterHelper.registerGrinderRecipe(new ItemStack(Items.COAL), newOutput(OreDictionary.getOres("dustCoal").get(0), 1.0f));	
-		}
-
-		oreDictionaryOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND)), "itemSilicon", 1);
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Items.BLAZE_ROD)), new GrinderOutput(new ItemStack(Items.BLAZE_POWDER, 4)), new GrinderOutput(ItemMaterials.dustSulfur, 0.1f));
 		
-		//Ingots
-		for(int index = 0; index < OreDictionary.getOres("ingotCopper").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("ingotCopper").get(index), newOutput(new ItemStack(ModItems.CopperDust, 1), 1.0f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("ingotSilver").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("ingotSilver").get(index), newOutput(new ItemStack(ModItems.SilverDust, 1), 1.0f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("ingotTin").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("ingotTin").get(index), newOutput(new ItemStack(ModItems.TinDust, 1), 1.0f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("ingotLead").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("ingotLead").get(index), newOutput(new ItemStack(ModItems.LeadDust, 1), 1.0f));
-		}
-		for(int index = 0; index < OreDictionary.getOres("ingotPlatinum").size(); index++) {
-			RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("ingotPlatinum").get(index), newOutput(new ItemStack(ModItems.PlatinumDust, 1), 1.0f));
-		}
+		oreDictionaryRecipe("oreSulfur", "dustSulfur", 4);
+		oreDictionaryRecipe("oreSaltpeter", "dustSaltpeter", 4);
+		oreDictionaryRecipe("orePotash", "dustPotash", 4);
+		oreDictionaryRecipe("oreBitumen", "dustBitumen", 4);
+		oreDictionaryRecipe("oreSalt", "dustSalt", 4);
+		oreDictionaryRecipe(Craft.ing("oreQuartz"), new GrinderOutput(new ItemStack(Items.QUARTZ, 4)));
+		oreDictionaryRecipe(Craft.ing("oreCertusQuartz"), new GrinderOutput("crystalCertusQuartz", 2), new GrinderOutput("dustCertusQuartz", 1, 0.25f));
 		
-		oreDictionaryRecipe("ingotSteel", "dustSteel", 1);
-		oreDictionaryRecipe("ingotBronze", "dustBronze", 1);
-		oreDictionaryRecipe("ingotElectrum", "dustElectrum", 1);
-		oreDictionaryRecipe("ingotInvar", "dustInvar", 1);
-		oreDictionaryRecipe("ingotUranium", "dustUranium", 1);
-		oreDictionaryRecipe("ingotAluminium", "dustAluminium", 1);
+		oreDictionaryRecipe("oreAquamarine", "gemAquamarine", 6);
+		oreDictionaryRecipe("oreAmethyst", "gemAmethyst", 3);
+		oreDictionaryRecipe("oreTopaz", "gemTopaz", 3);
+		oreDictionaryRecipe("orePeridot", "gemPeridot", 3);
+		oreDictionaryRecipe("oreTanzanite", "gemTanzanite", 3);
+		oreDictionaryRecipe("oreMalachite", "gemMalachite", 3);
+		oreDictionaryRecipe("oreAmber", "gemAmber", 3);
+		oreDictionaryRecipe("oreProsperity", "shardProsperity", 4);
+		oreDictionaryRecipe("oreNetherProsperity", "shardProsperity", 4);
+		oreDictionaryRecipe("oreEndProsperity", "shardProsperity", 4);
+		oreDictionaryRecipe("oreInferium", "dustInferium", 4);
+		oreDictionaryRecipe("oreNetherInferium", "dustInferium", 4);
+		oreDictionaryRecipe("oreEndInferium", "dustInferium", 4);
 		
-		oreDictionaryRecipe("oreRuby", "gemRuby", 4);
-		oreDictionaryRecipe("oreSapphire", "gemSapphire", 4);
-		oreDictionaryRecipe("orePeridot", "gemPeridot", 4);
-		oreDictionaryRecipe("gemRuby", "dustRuby", 1);
-		oreDictionaryRecipe("gemSapphire", "dustSapphire", 1);
+		oreDictionaryRecipe(Craft.ing("oreClathrateOilSand"), new GrinderOutput("clathrateOil", 3), new GrinderOutput(ItemMaterials.dustSaltpeter, 0.5f));
+		oreDictionaryRecipe(Craft.ing("oreClathrateOilShale"), new GrinderOutput("clathrateOil", 3), new GrinderOutput(new ItemStack(Items.FLINT), 0.5f));
+		oreDictionaryRecipe(Craft.ing("oreClathrateEnder"), new GrinderOutput("clathrateEnder", 3));
+		oreDictionaryRecipe(Craft.ing("oreClathrateRedstone"), new GrinderOutput("clathrateRedstone", 3), new GrinderOutput("crystalCinnabar", 0.5f));
+		oreDictionaryRecipe(Craft.ing("oreClathrateGlowstone"), new GrinderOutput("clathrateGlowstone", 3), new GrinderOutput("crystalCinnabar", 0.3f));
+		
+		oreDictionaryRecipe(Craft.ing("oreApatite"), new GrinderOutput("gemApatite", 14), new GrinderOutput(ItemMaterials.dustSaltpeter, 0.1f), new GrinderOutput(ItemMaterials.dustSulfur, 0.1f));
+		
+		oreDictionaryRecipe("oreManganese", "dustManganese", 2);
+		oreDictionaryRecipe("oreMithril", "dustMithril", 2);
+		oreDictionaryRecipe("oreZinc", "dustZinc", 2);
+		oreDictionaryRecipe("oreAdamantine", "dustAdamantine", 2);
+		oreDictionaryRecipe("oreAlduorite", "dustAlduorite", 2);
+		oreDictionaryRecipe("oreAstralSilver", "dustAstralSilver", 2);
+		oreDictionaryRecipe("oreAtlarus", "dustAtlarus", 2);
+		oreDictionaryRecipe("oreCarmot", "dustCarmot", 2);
+		oreDictionaryRecipe("oreCeruclase", "dustCeruclase", 2);
+		oreDictionaryRecipe("oreDeepIron", "dustDeepIron", 2);
+		oreDictionaryRecipe("oreEximite", "dustEximite", 2);
+		oreDictionaryRecipe("oreIgnatius", "dustIgnatius", 2);
+		oreDictionaryRecipe("oreInfuscolium", "dustInfuscolium", 2);
+		oreDictionaryRecipe("oreKalendrite", "dustKalendrite", 2);
+		oreDictionaryRecipe("oreLemurite", "dustLemurite", 2);
+		oreDictionaryRecipe("oreMagnesium", "dustMagnesium", 2);
+		oreDictionaryRecipe("oreMeutoite", "dustMeutoite", 2);
+		oreDictionaryRecipe("oreMidasium", "dustMidasium", 2);
+		oreDictionaryRecipe("oreOrichalcum", "dustOrichalcum", 2);
+		oreDictionaryRecipe("oreOureclase", "dustOureclase", 2);
+		oreDictionaryRecipe("orePrometheum", "dustPrometheum", 2);
+		oreDictionaryRecipe("oreRubracium", "dustRubracium", 2);
+		oreDictionaryRecipe("oreSanguinite", "dustSanguinite", 2);
+		oreDictionaryRecipe("oreShadowIron", "dustShadowIron", 2);
+		oreDictionaryRecipe("oreVulcanite", "dustVulcanite", 2);
+		oreDictionaryRecipe("oreVyroxeres", "dustVyroxeres", 2);
+		
+		oreDictionaryRecipe("oreYellorium", "dustUranium", 2);
+		oreDictionaryRecipe("oreCobalt", "dustCobalt", 2);
+		oreDictionaryRecipe("oreArdite", "dustArdite", 2);
+		oreDictionaryRecipe("oreTitanium", "dustTitanium", 2);
+		oreDictionaryRecipe("oreQuartzBlack", "dustQuartzBlack", 2);
+		oreDictionaryRecipe("oreAstralStarmetal", "dustAstralStarmetal", 2);
+		oreDictionaryRecipe("oreDraconium", "dustDraconium", 2);
+		
 		oreDictionaryRecipe("gemPeridot", "dustPeridot", 1);
-		
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Items.IRON_INGOT), newOutput(new ItemStack(ModItems.IronDust, 1), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Items.GOLD_INGOT), newOutput(new ItemStack(ModItems.GoldDust, 1), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(ModItems.RedstoneAlloyIngot), newOutput(new ItemStack(ModItems.RedstoneAlloyDust, 1), 1.0f));
-		
+
 		//Utils
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.WOOL)), newOutput(new ItemStack(Items.STRING, 4), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL)), newOutput(new ItemStack(Items.FLINT, 1), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE)), newOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND)), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE_WALL)), newOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND)), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.GLASS)), newOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND)), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.DIRT)), newOutput(new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL)), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.STONE)), newOutput(new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE)), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.SANDSTONE)), newOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND), 4), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.STAINED_HARDENED_CLAY)), newOutput(new ItemStack(Items.CLAY_BALL, 3), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.HARDENED_CLAY)), newOutput(new ItemStack(Items.CLAY_BALL, 3), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Item.getItemFromBlock(Blocks.BRICK_BLOCK)), newOutput(new ItemStack(Items.BRICK, 3), 1.0f));
-		RegisterHelper.registerGrinderRecipe(new ItemStack(Items.BONE), newOutput(new ItemStack(Items.DYE, 6, 15), 1.0f));
-	}
-	public static void oreDictionaryRecipe(String input, String output, int number) {
-		if(OreDictionary.getOres("input").size() > 0) {
-			for(int index = 0; index < OreDictionary.getOres("input").size(); index++) {
-				RegisterHelper.registerGrinderRecipe(OreDictionary.getOres("input").get(index), newOutput(new ItemStack(OreDictionary.getOres("output").get(0).getItem(), number), 1.0f));
-			}	
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.GRAVEL), new GrinderOutput(new ItemStack(Items.FLINT, 1)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.COBBLESTONE), new GrinderOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND))), new GrinderOutput(new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL)), 0.25f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.COBBLESTONE_WALL), new GrinderOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND))), new GrinderOutput(new ItemStack(Item.getItemFromBlock(Blocks.GRAVEL)), 0.25f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.GLASS), new GrinderOutput(new ItemStack(Item.getItemFromBlock(Blocks.SAND))));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.STONE), new GrinderOutput(new ItemStack(Item.getItemFromBlock(Blocks.COBBLESTONE))));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.STAINED_HARDENED_CLAY), new GrinderOutput(new ItemStack(Items.CLAY_BALL, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.HARDENED_CLAY), new GrinderOutput(new ItemStack(Items.CLAY_BALL, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.BRICK_BLOCK), new GrinderOutput(new ItemStack(Items.BRICK, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.SAND),  new GrinderOutput(Craft.outputStack(ItemMaterials.silicon)),  new GrinderOutput(ItemMaterials.silicon, 0.1f));
+		
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.BONE), new GrinderOutput(new ItemStack(Items.DYE, 6, 15)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.PRISMARINE_SHARD), new GrinderOutput(new ItemStack(Items.PRISMARINE_CRYSTALS)));
+		
+		/*Thanks to CoFH team for pointers on good items to add here! :) */
+		
+		for (int i = 0; i < 15; i++) {
+			RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.STAINED_GLASS, 1, i)), new GrinderOutput(new ItemStack(Blocks.SAND)), new GrinderOutput(new ItemStack(Items.DYE, 1, 15 - i), 0.1f));
 		}
-	}
-	public static void oreDictionaryRecipe(String metal, int number) {
-		String ore = "ore";
-		String dust = "dust";
-		if(OreDictionary.getOres(dust+metal).size() > 0) {
-			for(int index = 0; index < OreDictionary.getOres(ore+metal).size(); index++) {
-				ItemStack oreDustStack = OreDictionary.getOres(dust+metal).get(0);
-				oreDustStack.stackSize = number;
-				RegisterHelper.registerGrinderRecipe(OreDictionary.getOres(ore+metal).get(index), newOutput(oreDustStack, 1.0f));
-			}	
-		}
-	}
-	public static void oreDictionaryOutput(ItemStack input, String output, int number) {
-		if(OreDictionary.getOres(output).size() > 0) {
-			ItemStack outputStack = OreDictionary.getOres(output).get(0);
-			outputStack.stackSize = number;
-			RegisterHelper.registerGrinderRecipe(input, newOutput(outputStack, 1.0f));	
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.REDSTONE_LAMP), new GrinderOutput(new ItemStack(Items.REDSTONE, 4)), new GrinderOutput(new ItemStack(Items.GLOWSTONE_DUST, 2), 0.5f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.BRICK_BLOCK), new GrinderOutput(new ItemStack(Items.BRICK, 4)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.NETHER_BRICK), new GrinderOutput(new ItemStack(Items.NETHERBRICK, 4)));
+
+		for (int i = 0; i < 3; i++) {
+			RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.QUARTZ_BLOCK, 1, i)), new GrinderOutput(new ItemStack(Items.QUARTZ, 4)));
+			RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.SANDSTONE, 1, i)), new GrinderOutput(new ItemStack(Blocks.SAND, 4)));
+			RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.RED_SANDSTONE, 1, i)), new GrinderOutput(new ItemStack(Blocks.SAND, 4, 1)));
 		}
 
+		/* STAIRS */
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.STONE_SLAB, 1, 4)), new GrinderOutput(new ItemStack(Items.BRICK, 2)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.STONE_SLAB, 1, 6)), new GrinderOutput(new ItemStack(Items.NETHERBRICK, 2)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.STONE_SLAB, 1, 7)), new GrinderOutput(new ItemStack(Items.QUARTZ, 2)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.STONE_SLAB, 1, 1)), new GrinderOutput(new ItemStack(Blocks.SAND)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(new ItemStack(Blocks.STONE_SLAB2, 1, 0)), new GrinderOutput(new ItemStack(Blocks.SAND, 1, 1)));
+		
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.BRICK_STAIRS), new GrinderOutput(new ItemStack(Items.BRICK, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.NETHER_BRICK_STAIRS), new GrinderOutput(new ItemStack(Items.NETHERBRICK, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.QUARTZ_STAIRS), new GrinderOutput(new ItemStack(Items.QUARTZ, 3)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.SANDSTONE_STAIRS), new GrinderOutput(new ItemStack(Blocks.SAND, 2)));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.RED_SANDSTONE_STAIRS), new GrinderOutput(new ItemStack(Blocks.SAND, 2, 1)));
+
+		/* MISC */
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.FLOWER_POT), new GrinderOutput(new ItemStack(Items.BRICK, 2)), new GrinderOutput(new ItemStack(Items.BRICK, 1), 0.5f));
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Items.GLASS_BOTTLE), new GrinderOutput(new ItemStack(Blocks.SAND)));		
+		RegisterHelper.registerGrinderRecipe(Craft.ing(Blocks.STONEBRICK), new GrinderOutput(new ItemStack(Blocks.STONEBRICK, 1, 2)));
 	}
-	public static void ingotDictionaryRecipe(String metal, int number) {
-		String ingot = "ingot";
-		String dust = "dust";
-		if(OreDictionary.getOres(dust+metal).size() > 0) {
-			for(int index = 0; index < OreDictionary.getOres(ingot+metal).size(); index++) {
-				ItemStack ingotDustStack = OreDictionary.getOres(dust+metal).get(0);
-				ingotDustStack.stackSize = number;
-				RegisterHelper.registerGrinderRecipe(OreDictionary.getOres(ingot+metal).get(index), newOutput(ingotDustStack, 1.0f));
+	private static void registerIngotToDustRecipes() {
+		for (String ore : OreDictionary.getOreNames()) {
+			if(ore.startsWith("ingot")) {
+				String output = "dust"+ore.substring(5);
+				if(OreDictionary.doesOreNameExist(output)) {
+					oreDictionaryRecipe(ore, output, 1);
+				}
 			}
 		}
 	}
-	public static void baseDictionaryRecipe(String input, String output, int number) {
-		if(OreDictionary.getOres(output).size() > 0) {
-			for(int index = 0; index < OreDictionary.getOres(input).size(); index++) {
-				ItemStack result = OreDictionary.getOres(output).get(0);
-				result.stackSize = number;
-				RegisterHelper.registerGrinderRecipe(OreDictionary.getOres(input).get(index), newOutput(result, 1.0f));
+	private static void registerOreToDustRecipes() {
+		for(String ore : OreDictionary.getOreNames()) {
+			if(ore.startsWith("ore")) {
+				String output = "dust"+ore.substring(3);
+				if(OreDictionary.doesOreNameExist(output)) {
+					oreDictionaryRecipe(ore, output, 2);
+				}
 			}
 		}
 	}
-	public static GrinderOutput newOutput(ItemStack itemstack, float percentage) {
-		GrinderOutputWrapper dummyWrapper = new GrinderOutputWrapper(null, null, null);
-		GrinderOutput tempOutput = new GrinderOutput(itemstack, percentage);
-		return tempOutput;
+	private static void oreDictionaryRecipe(String input, String output, int number) {
+		if(OreDictionary.doesOreNameExist(input) && OreDictionary.getOres(output).size() > 0) {
+			RegisterHelper.registerGrinderRecipe(Craft.ing(input), new GrinderOutput(ItemHandlerHelper.copyStackWithSize(OreDictionary.getOres(output).get(0).copy(), number)));	
+		}
 	}
-	public static void registerGrinderRecipe(ItemStack input, GrinderOutput... output) {
-		RegisterHelper.registerGrinderRecipe(input, output);
+	private static void oreDictionaryRecipe(Ingredient input, GrinderOutput... outputs) {
+		if(input != null) {
+			RegisterHelper.registerGrinderRecipe(input, outputs);
+		}
 	}
 }

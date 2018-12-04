@@ -1,20 +1,11 @@
 package theking530.staticpower.conduits.fluidconduit;
 
-import java.util.ArrayList;
-
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import theking530.staticpower.conduits.TileEntityBaseConduit;
-import theking530.staticpower.utils.Vector3;
-import theking530.staticpower.utils.WorldUtilities;
 
 public class TileEntityFluidConduit extends TileEntityBaseConduit implements IFluidHandler{
 	

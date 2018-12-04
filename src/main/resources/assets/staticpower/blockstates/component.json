@@ -1,0 +1,37 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "builtin/generated",
+		"transform": "forge:default-item"
+	},
+	"variants": {
+		"variant": {
+			"basicprocessor":   			{"textures": {"layer0": "staticpower:items/components/processor_basic"}},
+			"staticprocessor":   			{"textures": {"layer0": "staticpower:items/components/processor_static"}},
+			"energizedprocessor":   		{"textures": {"layer0": "staticpower:items/components/processor_energized"}},
+			"lumumprocessor":   			{"textures": {"layer0": "staticpower:items/components/processor_lumum"}},
+			
+
+			"ioport":   					{"textures": {"layer0": "staticpower:items/components/io_port"}},
+			"wirecopper":   				{"textures": {"layer0": "staticpower:items/components/wire_copper"}},
+			"wiresilver":   				{"textures": {"layer0": "staticpower:items/components/wire_silver"}},
+			"wiregold":   					{"textures": {"layer0": "staticpower:items/components/wire_gold"}},
+			"coilcopper":   				{"textures": {"layer0": "staticpower:items/components/coil_copper"}},
+			"coilsilver":   				{"textures": {"layer0": "staticpower:items/components/coil_silver"}},
+			"coilgold":   					{"textures": {"layer0": "staticpower:items/components/coil_gold"}},
+
+			"memorychip":   				{"textures": {"layer0": "staticpower:items/components/memory_chip"}},
+			"logicgatepowersync":   		{"textures": {"layer0": "staticpower:items/components/logic_gate_power_sync"}},
+			"invertedlogicgatepowersync":   {"textures": {"layer0": "staticpower:items/components/inverted_logic_gate_power_sync"}},
+			"logicgateservo":   			{"textures": {"layer0": "staticpower:items/components/logic_gate_servo"}},
+			"diode":   						{"textures": {"layer0": "staticpower:items/components/diode"}},
+			"transistor":   				{"textures": {"layer0": "staticpower:items/components/transistor"}},
+			"internalclock":   				{"textures": {"layer0": "staticpower:items/components/internal_clock"}},
+					
+			"basicupgradeplate":   			{"textures": {"layer0": "staticpower:items/components/upgrade_plate_basic"}},
+			"staticupgradeplate":   		{"textures": {"layer0": "staticpower:items/components/upgrade_plate_static"}},
+			"energizedupgradeplate":   		{"textures": {"layer0": "staticpower:items/components/upgrade_plate_energized"}},
+			"lumumupgradeplate":   			{"textures": {"layer0": "staticpower:items/components/upgrade_plate_lumum"}}
+		}
+	}
+}

@@ -1,160 +1,102 @@
 package theking530.staticpower.items.itemfilter;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.ItemStackHandler;
 
-public class InventoryItemFilter implements IInventory {
+public class InventoryItemFilter extends ItemStackHandler {
 	
-	private final ItemStack ITEMSTACK;
-	private ItemStack[] slots;
-	private boolean WHITE_LIST_MODE = true;
-	private FilterTier TIER;
+	public final ItemStack owningItemStack;
+	private boolean whiteListMode = true;
+    private boolean checkMetadata = false;
+    private boolean checkNBT = false;
+    private boolean checkOreDictionary = false;
+    private boolean checkModDomain = false;
+	private FilterTier filterTier;
 		
 	public InventoryItemFilter(ItemStack stack, FilterTier tier) {
-		ITEMSTACK = stack;
+		super(tier.getSlotCount());
+		owningItemStack = stack;
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
+		}else{
+			deserializeNBT(stack.getTagCompound());
 		}
-		TIER = tier;
-		switch(TIER) {
-			case BASIC:
-				slots = new ItemStack[4];
-				break;
-			case UPGRADED:
-				slots = new ItemStack[8];
-				break;
-			case ADVANCED:
-				slots = new ItemStack[10];
-				break;
-			default:
-				slots = new ItemStack[10];
-				break;
-		}
-		readFromNBT(stack.getTagCompound());
+		filterTier = tier;
+	}
+	public FilterTier getFilterTier() {
+		return filterTier;
+	}
+	public void setMatchMetadata(boolean mode) {
+		checkMetadata = mode;
+	}
+	public boolean getMatchMetadata() {
+		return checkMetadata;
+	}
+	public void setMatchNBT(boolean mode) {
+		checkNBT = mode;
+	}
+	public boolean getMatchNBT() {
+		return checkNBT;
+	}
+	
+	public void setMatchOreDictionary(boolean mode) {
+		checkOreDictionary = mode;
+	}
+	public boolean getMatchOreDictionary() {
+		return checkOreDictionary;
+	}
+	public void setMatchModeID(boolean mode) {
+		checkModDomain = mode;
+	}
+	public boolean getMatchModID() {
+		return checkModDomain;
 	}
 	public void setWhiteListMode(boolean mode) {
-		WHITE_LIST_MODE = mode;
+		whiteListMode = mode;
 	}
 	public boolean getWhiteListMode() {
-		return WHITE_LIST_MODE;
+		return whiteListMode;
 	}
 	
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer){
-		return true;
+    public NBTTagCompound serializeNBT() {
+		NBTTagCompound compound = super.serializeNBT();
+		compound.setBoolean("WHITE_LIST_MODE", whiteListMode);
+		compound.setBoolean("MATCH_METADATA", checkMetadata);
+		compound.setBoolean("MATCH_NBT", checkNBT);
+		compound.setBoolean("MATCH_ORE_DICT", checkOreDictionary);	
+		return compound;
 	}
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack itemstack){
-		return !(itemstack.getItem() instanceof ItemFilter);
-	}
-	public void readFromNBT(NBTTagCompound compound){
-		NBTTagList items = compound.getTagList("ItemInventory", Constants.NBT.TAG_COMPOUND);
-		WHITE_LIST_MODE = compound.getBoolean("WHITE_LIST_MODE");
-		TIER = FilterTier.values()[compound.getInteger("TIER")];
-		for (int i = 0; i < items.tagCount(); ++i){
-			NBTTagCompound item = (NBTTagCompound) items.getCompoundTagAt(i);
-			int slot = item.getInteger("Slot");
-			if (slot >= 0 && slot < getSizeInventory()) {
-				slots[slot] = ItemStack.loadItemStackFromNBT(item);
-			}
-		}
-	}
-	public void writeToNBT(NBTTagCompound tagcompound){
-		NBTTagList items = new NBTTagList();		
-		for (int i = 0; i < getSizeInventory(); ++i){
-			if (getStackInSlot(i) != null){
-				NBTTagCompound item = new NBTTagCompound();
-				item.setInteger("Slot", i);
-				getStackInSlot(i).writeToNBT(item);
-				items.appendTag(item);
-			}
-		}
-		tagcompound.setInteger("TIER", TIER.ordinal());
-		tagcompound.setTag("ItemInventory", items);
-		tagcompound.setBoolean("WHITE_LIST_MODE", WHITE_LIST_MODE);
-		//System.out.println(WHITE_LIST_MODE);
+	public void deserializeNBT(NBTTagCompound compound){
+		super.deserializeNBT(compound);
+		whiteListMode = compound.getBoolean("WHITE_LIST_MODE");
+		checkMetadata = compound.getBoolean("MATCH_METADATA");
+		checkNBT = compound.getBoolean("MATCH_NBT");
+		checkOreDictionary = compound.getBoolean("MATCH_ORE_DICT");
 	}
 	@Override
-	public int getSizeInventory() {
-		return slots.length;
-	}
-	@Override
-	public ItemStack getStackInSlot(int slot){
-		if(slot >= 0 && slot < slots.length) {
-			return slots[slot];	
-		}
-		return null;
-	}
-	@Override
-	public ItemStack decrStackSize(int slot, int amount){
-		ItemStack stack = getStackInSlot(slot);
-		if(stack != null){
-			if(stack.stackSize > amount){
-				stack = stack.splitStack(amount);
-				markDirty();
-			}else{
-				setInventorySlotContents(slot, null);
-			}
-		}
-		return stack;
-	}
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack){
-		slots[slot] = stack;
-		markDirty();
-	}
-	@Override
-	public int getInventoryStackLimit(){
+    public int getSlotLimit(int slot) {
 		return 1;
 	}
 	@Override
-	public void markDirty(){
-		for (int i = 0; i < getSizeInventory(); ++i){
-			if (getStackInSlot(i) != null && getStackInSlot(i).stackSize == 0) {
-				slots[i] = null;
-			}
-		}		
-		writeToNBT(ITEMSTACK.getTagCompound());
-	}
-	@Override
+    protected void onContentsChanged(int slot) {
+		owningItemStack.setTagCompound(serializeNBT());
+    }
 	public String getName() {
-		return "container.ItemFilter";
-	}
-	@Override
-	public boolean hasCustomName() {
-		return true;
-	}
-	@Override
-	public ITextComponent getDisplayName() {
-		return null;
-	}
-	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return null;
-	}
-	@Override
-	public void openInventory(EntityPlayer player) {
-	}
-	@Override
-	public void closeInventory(EntityPlayer player) {
-	}
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-	@Override
-	public void setField(int id, int value) {	
-	}
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-	@Override
-	public void clear() {
+		String name = "ItemFilter";
+		switch(filterTier) {
+		case BASIC:
+			name = "BasicItemFilter";
+			break;
+		case UPGRADED:
+			name = "UpgradedItemFilter";
+			break;
+		case ADVANCED:
+			name = "AdvancedItemFilter";
+			break;
+		}
+		return "container." + name;
 	}
 }

@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+	    "layer0": "staticpower:items/EnergizedPortableBattery",
+        "layer1": "staticpower:items/PortableBatteryBar"
+    }
+}

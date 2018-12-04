@@ -1,62 +1,50 @@
 package theking530.staticpower.items.book;
 
-import java.io.IOException;
-
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
+import api.gui.GuiDrawUtilities;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import theking530.staticpower.client.gui.widgets.GuiInfoTab;
-import theking530.staticpower.handlers.PacketHandler;
-import theking530.staticpower.items.itemfilter.ContainerItemFilter;
-import theking530.staticpower.items.itemfilter.FilterTier;
-import theking530.staticpower.items.itemfilter.InventoryItemFilter;
-import theking530.staticpower.items.itemfilter.PacketItemFilter;
-import theking530.staticpower.utils.GuiTextures;
+import net.minecraft.init.SoundEvents;
+import theking530.staticpower.assists.utilities.GuiUtilities;
+import theking530.staticpower.client.gui.BaseGuiContainer;
 
-public class GuiStaticBook extends GuiScreen {
+public class GuiStaticBook extends BaseGuiContainer {
 	
-	private int xSize;
-	private int ySize;
-	
-	public GuiStaticBook() {
-		xSize = 176;
-		ySize = 205;	
+	public GuiStaticBook(InventoryPlayer invPlayer) {
+		super(new ContainerStaticBook(), 200, 300);
+		invPlayer.player.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0f, 1.0f);
 	}
+
 	@Override
 	public void initGui() {
 		super.initGui();
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
 	}
+	
 	@Override			
 	protected void actionPerformed(GuiButton B) {
+		
 	}
-	public void updateScreen() {
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-
-	}	
 	public void drawScreen(int par1, int par2, float par3) {
-	    	super.drawScreen(par1, par2, par3);
-	    	int var1 = (this.width - this.xSize) / 2;
-	        int var2 = (this.height - this.ySize) / 2;       
+    	super.drawScreen(par1, par2, par3);
+    	GlStateManager.disableLighting();
+    	
+    	String text = "Static Power";
+    	Gui.drawRect(guiLeft+55, guiTop+5, guiLeft+140, guiTop+22, GuiUtilities.getColor(100, 100, 100, 100));
+    	GuiDrawUtilities.drawStringWithSize(text, guiLeft + 170 - fontRenderer.getStringWidth(text)/2, guiTop+20, 1.25f, GuiUtilities.getColor(255, 255, 255), true);
+    	
+    	String text2 = "WIP";
+    	Gui.drawRect(guiLeft+55, guiTop+35, guiLeft+140, guiTop+52, GuiUtilities.getColor(100, 100, 100, 100));
+    	GuiDrawUtilities.drawStringWithSize(text2, guiLeft + 120 - fontRenderer.getStringWidth(text2)/2, guiTop+50, 1.25f, GuiUtilities.getColor(255, 255, 255), true);
+
 	}
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
-		String name = "Item Filter";
-		//this.fontRendererObj.drawString(name, this.xSize - 169, 6, 4210752 );
 		
-		Minecraft.getMinecraft().getTextureManager().bindTexture(GuiTextures.AFILTER_GUI);
-		//drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-	}	
+	}
+
 	@Override
-	protected void mouseClicked(int x, int y, int button) throws IOException{
-	    super.mouseClicked(x, y, button);
+	protected void drawExtra(float partialTicks, int mouseX, int mouseY) {
+		drawGenericBackground();
 	}	
-	protected void mouseClickMove(int x, int y, int button, long time) {
-		super.mouseClickMove(x, y, button, time);
-	}	
+
 }

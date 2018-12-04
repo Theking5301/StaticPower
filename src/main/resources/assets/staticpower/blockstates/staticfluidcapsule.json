@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "inventory": {
+      "model": "forge:forgebucket",
+      "textures": {
+        "base": "staticpower:items/static_fluid_capsule_empty",
+        "fluid": "staticpower:items/fluid_capsule_liquid"
+      },
+      "transform": "forge:default-item"
+    }
+  }
+}

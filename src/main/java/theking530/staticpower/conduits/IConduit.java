@@ -1,9 +1,9 @@
 package theking530.staticpower.conduits;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 public interface IConduit {
 
-	public boolean isConduit(BlockPos pos);
-	public boolean isReciever(BlockPos pos);
+	public boolean isConduit(EnumFacing side);
+	public boolean isReciever(EnumFacing side);
 }

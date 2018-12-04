@@ -1,122 +1,64 @@
 package theking530.staticpower.machines.cropsqueezer;
 
+import cofh.redstoneflux.api.IEnergyContainerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import theking530.staticpower.container.BaseContainer;
 import theking530.staticpower.handlers.crafting.registries.SqueezerRecipeRegistry;
-import theking530.staticpower.machines.fluidinfuser.SlotFluidInfuser;
+import theking530.staticpower.items.upgrades.BaseUpgrade;
+import theking530.staticpower.machines.tileentitycomponents.slots.BatterySlot;
+import theking530.staticpower.machines.tileentitycomponents.slots.FluidContainerSlot;
+import theking530.staticpower.machines.tileentitycomponents.slots.OutputSlot;
+import theking530.staticpower.machines.tileentitycomponents.slots.StaticPowerContainerSlot;
+import theking530.staticpower.machines.tileentitycomponents.slots.UpgradeSlot;
 
-public class ContainerCropSqueezer extends Container {
+public class ContainerCropSqueezer extends BaseContainer {
 	
-	private TileEntityCropSqueezer CropSqueezer;
-	private int infusingTime;
-	private int fluidAmount;
-	private int lastItemInfusionTime;
-	private int upgradeSlotX;
-	private int upgradeSlotY;
 	public ContainerCropSqueezer(InventoryPlayer invPlayer, TileEntityCropSqueezer teCropSqueezer) {
-		infusingTime = 0;
-		fluidAmount = 0;
-		lastItemInfusionTime = 0;
-		
-		CropSqueezer = teCropSqueezer;
-		
 		//Input
-		this.addSlotToContainer(new Slot(teCropSqueezer, 0, 84, 16));
-		
-		//Output
-		this.addSlotToContainer(new SlotFluidInfuser(invPlayer.player, teCropSqueezer, 1, 84, 56) {
+		this.addSlotToContainer(new StaticPowerContainerSlot(teCropSqueezer.slotsInput, 0, 80, 18) {
 			@Override
 	        public boolean isItemValid(ItemStack itemStack) {
-		          return SqueezerRecipeRegistry.Squeezing().getSqueezingItemResult(itemStack) != null;
-		        }
+		          return SqueezerRecipeRegistry.Squeezing().getSqueezingRecipe(itemStack) != null;
+		    }
 		});
 		
+		//Fluid Slots
+		this.addSlotToContainer(new FluidContainerSlot(teCropSqueezer.slotsInternal, 1, -24, 12));
+		this.addSlotToContainer(new OutputSlot(teCropSqueezer.slotsInternal, 2, -24, 42));
+		
+		//BatterySlot
+		this.addSlotToContainer(new BatterySlot(teCropSqueezer.slotsInternal, 3, 8, 54));
+		
+		//Output
+		this.addSlotToContainer(new OutputSlot(teCropSqueezer.slotsOutput, 0, 80, 57));
+		
 		//Upgrades
-		this.addSlotToContainer(new Slot(teCropSqueezer, 2, upgradeSlotX+152, upgradeSlotY+12));
-		this.addSlotToContainer(new Slot(teCropSqueezer, 3, upgradeSlotX+152, upgradeSlotY+32));
-		this.addSlotToContainer(new Slot(teCropSqueezer, 4, upgradeSlotX+152, upgradeSlotY+52));
+		this.addSlotToContainer(new UpgradeSlot(teCropSqueezer.slotsUpgrades, 0, -24, 76));
+		this.addSlotToContainer(new UpgradeSlot(teCropSqueezer.slotsUpgrades, 1, -24, 94));
+		this.addSlotToContainer(new UpgradeSlot(teCropSqueezer.slotsUpgrades, 2, -24, 112));
 		
-		//Processing
-		this.addSlotToContainer(new Slot(teCropSqueezer, 5, 10000, 10000));
-		
-		//Inventory
-				for(int i = 0; i < 3; i++) {
-					for(int j = 0; j < 9; j++) {
-						this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-					}
-				}
-				
-				//ActionBar
-				for(int i = 0; i < 9; i++) {
-					this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
-			}
+		this.addPlayerInventory(invPlayer, 8, 84);
+		this.addPlayerHotbar(invPlayer, 8, 142);
 	}
-	public void moveUpgradeSlots(int x, int y) {
-		this.upgradeSlotY = y;
-		this.upgradeSlotX = x;
-	}
-	//Shift Click Functionality
-	public ItemStack transferStackInSlot(EntityPlayer player, int invSlot) {
-        ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(invSlot);
-
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-
-            if (invSlot == 1 || invSlot == 0) {
-                if (!this.mergeItemStack(itemstack1, 6, 42, true)) {
-                    return null;
-                }
-                slot.onSlotChange(itemstack1, itemstack);
-            }else if (invSlot != 1 && invSlot != 0){
-                if (SqueezerRecipeRegistry.Squeezing().getSqueezingItemResult(itemstack1) != null){
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)){
-                        return null;
-                    }
-                }else if (invSlot >= 6 && invSlot < 33) {
-                    if (!this.mergeItemStack(itemstack1, 30, 39, false)) {
-                        return null;
-                    }
-                }else if (invSlot >= 33 && invSlot < 42 && !this.mergeItemStack(itemstack1, 6, 33, false))  {
-                    return null;
-                }
-            }else if (!this.mergeItemStack(itemstack1, 6, 42, false)) {
-                return null;
-            }
-            if (itemstack1.stackSize == 0){
-                slot.putStack((ItemStack)null);
-            }else {
-                slot.onSlotChanged();
-            }
-            if (itemstack1.stackSize == itemstack.stackSize){
-                return null;
-            }
-            slot.onPickupFromSlot(player, itemstack1);
-        }
-        return itemstack;
-    }
-
-	
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return CropSqueezer.isUseableByPlayer(player);
-	}
-	
-	//Detect Changes
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		this.infusingTime = this.CropSqueezer.PROCESSING_TIMER;
-	}
-	
-	//Send Gui Update
-	public void updateProgressBar(int i, int j) {
-		if (i == 0) {
-			CropSqueezer.PROCESSING_TIMER = j;
-		}
+	protected boolean playerItemShiftClicked(ItemStack stack, EntityPlayer player, InventoryPlayer invPlayer, Slot slot, int slotIndex) {
+        if (SqueezerRecipeRegistry.Squeezing().getSqueezingRecipe(stack) != null && !mergeItemStack(stack, 0)) {
+        	return true;
+        }
+        if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && !mergeItemStack(stack, 1)) {
+        	return true;
+        }
+        if (stack.getItem() instanceof IEnergyContainerItem && !mergeItemStack(stack, 3)) {
+        	return true;
+        }
+        if (stack.getItem() instanceof BaseUpgrade && !mergeItemStack(stack, 5, 8, false)) {
+        	return true;
+        }
+		return false;	
 	}
 }
 

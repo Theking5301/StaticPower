@@ -1,0 +1,24 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+			"#Material": "staticpower:lumum_solar_panel"
+		},
+        "model": "staticpower:solarpanel.obj",
+		"custom": { "flip-v": true }
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{
+            "transform": "forge:default-block"
+        }],
+        "facing": {
+            "down": {"model": "staticpower:solarpanel.obj", "x": 90},
+            "up": {"model": "staticpower:solarpanel.obj", "x": 270},
+            "north": {"model": "staticpower:solarpanel.obj", "y": 90},
+            "south": {"model": "staticpower:solarpanel.obj", "y": 270},
+            "west": {"model": "staticpower:solarpanel.obj", "y": 180},
+            "east": {"model": "staticpower:solarpanel.obj", "y": 0}
+        }
+    }
+}

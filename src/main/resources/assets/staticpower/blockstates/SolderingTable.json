@@ -1,5 +1,24 @@
 {
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+			"#Material": "staticpower:soldering_table"
+		},
+        "model": "staticpower:soldering_table.obj",
+		"custom": { "flip-v": true }
+    },
     "variants": {
-        "normal": { "model": "staticpower:SolderingTable" }
+        "normal": [{}],
+        "inventory": [{
+            "transform": "forge:default-block"
+        }],
+        "facing": {
+            "down": {"model": "staticpower:soldering_table.obj", "x": 90},
+            "up": {"model": "staticpower:soldering_table.obj", "x": 270},
+            "north": {"model": "staticpower:soldering_table.obj"},
+            "south": {"model": "staticpower:soldering_table.obj", "y": 180},
+            "west": {"model": "staticpower:soldering_table.obj", "y": 270},
+            "east": {"model": "staticpower:soldering_table.obj", "y": 90}
+        }
     }
 }

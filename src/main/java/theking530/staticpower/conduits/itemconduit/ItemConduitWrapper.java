@@ -1,72 +1,80 @@
 package theking530.staticpower.conduits.itemconduit;
 
-import java.util.ArrayList;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import theking530.staticpower.assists.utilities.WorldUtilities;
+import theking530.staticpower.conduits.ConduitPath;
 
 public class ItemConduitWrapper {
-	public ItemStack ITEM;
-	public TileEntity INVENTORY_SOURCE;
-	public ArrayList<TileEntity> PATH = new ArrayList();
-	public int CURRENT_PATH_INDEX = 0;
+	private ItemStack ITEM;
+	private BlockPos SOURCE;
+	private ConduitPath PATH;
+	private float RANDOM_ROTATION;
+	private int CURRENT_INDEX;
 	
-	public ItemConduitWrapper(ItemStack item, TileEntity inv, TileEntityItemConduit startingConduit) {
+	private int MOVE_TIMER;
+	
+	public ItemConduitWrapper(ItemStack item, BlockPos source, float randomRotation) {
 		ITEM = item;
-		INVENTORY_SOURCE = inv;
-		PATH.add(startingConduit);
+		SOURCE = source;
+		CURRENT_INDEX = 0;
+		RANDOM_ROTATION = randomRotation;
+		MOVE_TIMER = 0;
 	}
-	public void setStartingConduit(TileEntityItemConduit conduit) {
-		PATH.clear();
-		PATH.add(conduit);
+	public void setPath(ConduitPath path) {
+		PATH = path;
+		CURRENT_INDEX=0;
 	}
-	public EnumFacing getNextDirection() {
-		if(PATH.size() > CURRENT_PATH_INDEX + 1 && PATH.get(CURRENT_PATH_INDEX) != null && PATH.get(CURRENT_PATH_INDEX + 1) != null) {
-			//return WorldUtilities.getOppositeDirection(WorldUtilities.getDirectionBetweenEntities(PATH.get(CURRENT_PATH_INDEX), PATH.get(CURRENT_PATH_INDEX + 1)));	
+	public void incrementPath() {
+		CURRENT_INDEX++;
+	}
+	public BlockPos getNextBlockPos() {
+		if(PATH == null || CURRENT_INDEX >= PATH.size()) {
+			return null;
 		}
-		return null;
+		return PATH.get(CURRENT_INDEX);
 	}
-	public boolean hasValidInventory() {
-		if(PATH.size() > 0 && PATH.get(PATH.size()-1) != null && PATH.get(PATH.size()-1) instanceof ISidedInventory) {
-			return true;
+	public BlockPos getCurrentBlockPos() {
+		if(PATH == null || CURRENT_INDEX >= PATH.size()) {
+			return null;
 		}
-		return false;
+		return CURRENT_INDEX == 0 ? PATH.get(CURRENT_INDEX) : PATH.get(CURRENT_INDEX-1);
 	}
-	public TileEntity getDestination(){
-		if(PATH.get(PATH.size()-1) != null && PATH.get(PATH.size()-1) instanceof ISidedInventory) {
-			return PATH.get(PATH.size()-1);
+	public boolean hasPath() {
+		if(PATH == null) {
+			return false;
+		}else{
+			return PATH.size() > 2;
 		}
-		return null;
 	}
-	public boolean pathCompleted() {
-		if(PATH.get(CURRENT_PATH_INDEX+1) != null && PATH.get(CURRENT_PATH_INDEX+1) instanceof ISidedInventory) {
-			return true;
-		}
-		return false;
+	public ConduitPath getPath() {
+		return PATH;
 	}
-	public void writeToNBT(NBTTagCompound tag) {
-		tag.setInteger("IXCOORD", INVENTORY_SOURCE.getPos().getX());
-		tag.setInteger("IYCOORD", INVENTORY_SOURCE.getPos().getY());
-		tag.setInteger("IZCOORD", INVENTORY_SOURCE.getPos().getZ());
-
+	public BlockPos getSourceLocation() {
+		return SOURCE;
+	}
+	public ItemStack getItemStack() {
+		return ITEM;
+	}
+	public EnumFacing getCurrentDirection() {
+		return WorldUtilities.getFacingFromPos(getCurrentBlockPos(), getNextBlockPos());
+	}	
+	public float getRotationOffset() {
+		return RANDOM_ROTATION;
+	}
+	public int getMoveTimer() {
+		return MOVE_TIMER;
+	}
+	public void incrementMoveTimer() {
+		MOVE_TIMER++;
+	}
+	
+	public void readFromNBT(NBTTagCompound nbt) {
 		
-		NBTTagCompound nbt1 = new NBTTagCompound();
-		if(ITEM != null) {
-			ITEM.writeToNBT(nbt1);
-			tag.setTag("Item", nbt1);
-		}
-	}
-	public void readFromNBT(NBTTagCompound tag) {
-		ITEM = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Item"));
-		if(Minecraft.getMinecraft().theWorld.getTileEntity(new BlockPos(tag.getInteger("IXCOORD"), tag.getInteger("IYCOORD"), tag.getInteger("IZCOORD"))) != null) {
-			if(Minecraft.getMinecraft().theWorld.getTileEntity(new BlockPos(tag.getInteger("IXCOORD"), tag.getInteger("IYCOORD"), tag.getInteger("IZCOORD"))) instanceof ISidedInventory) {
-				INVENTORY_SOURCE = Minecraft.getMinecraft().theWorld.getTileEntity(new BlockPos(tag.getInteger("IXCOORD"), tag.getInteger("IYCOORD"), tag.getInteger("IZCOORD")));
-			}
-		}
+	}		
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		return nbt;
 	}
 }

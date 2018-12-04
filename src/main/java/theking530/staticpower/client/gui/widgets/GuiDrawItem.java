@@ -1,74 +1,61 @@
 package theking530.staticpower.client.gui.widgets;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ICrashReportDetail;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ReportedException;
-import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3d;
 
 public class GuiDrawItem {
 	
 	public static RenderItem render = Minecraft.getMinecraft().getRenderItem();
+	public static Vec3d COLOR;
+	public static boolean SHOULD_DRAW = true;
 	
-	public static void drawItem(Item item, int guiLeft, int guiTop, int x, int y, float zLevel) {
-        renderItemModelIntoGUI(new ItemStack(item), guiLeft+x, guiTop+y, zLevel, render.getItemModelWithOverrides(new ItemStack(item), (World)null, Minecraft.getMinecraft().thePlayer));
+	public GuiDrawItem(boolean ShouldDraw) {
+		SHOULD_DRAW = ShouldDraw;
 	}
-    private static void setupGuiTransform(int xPosition, int yPosition, float zLevel, boolean isGui3d) {
-        GlStateManager.translate((float)xPosition, (float)yPosition, 100.0F + zLevel);
-        GlStateManager.translate(8.0F, 8.0F, 0.0F);
-        GlStateManager.scale(1.0F, -1.0F, 1.0F);
-        GlStateManager.scale(16.0F, 16.0F, 16.0F);
-
-        if (isGui3d) {
-            GlStateManager.enableLighting();
-        }else {
-            GlStateManager.disableLighting();
+	
+	public void setShouldDraw(boolean ShouldDraw) {
+		SHOULD_DRAW = ShouldDraw;
+	}
+	public static void drawItem(Item item, int guiLeft, int guiTop, int x, int y, float zLevel, float alpha) {
+        if(SHOULD_DRAW) {
+        	renderItemModelIntoGUI(new ItemStack(item), guiLeft+x, guiTop+y, zLevel, alpha, render.getItemModelWithOverrides(new ItemStack(item), Minecraft.getMinecraft().world, Minecraft.getMinecraft().player));
         }
     }
-    protected static void renderItemModelIntoGUI(ItemStack stack, int x, int y, float zLevel, IBakedModel bakedmodel) {
-        GlStateManager.pushMatrix();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.enableAlpha();
-        GlStateManager.alphaFunc(516, 0.1F);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        setupGuiTransform(x, y, zLevel, bakedmodel.isGui3d());
-        bakedmodel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedmodel, ItemCameraTransforms.TransformType.GUI, false);
-        GL11.glColor4f(1, 1, 1, 0.5F);
-        render.renderItem(stack, bakedmodel);
-        GL11.glColor4f(1, 1, 1, 1);
-        GlStateManager.disableAlpha();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.disableLighting();
-        GlStateManager.popMatrix();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+	public static void drawItem(ItemStack item, int guiLeft, int guiTop, int x, int y, float zLevel, float alpha) {
+        if(SHOULD_DRAW) {
+        	renderItemModelIntoGUI(item, guiLeft+x, guiTop+y, zLevel, alpha, render.getItemModelWithOverrides(item, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player));
+        }
+    }
+    protected static void renderItemModelIntoGUI(ItemStack stack, int x, int y, float zLevel, float alpha, IBakedModel bakedmodel) { 
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f-alpha);
+        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
+		GL11.glEnable(GL11.GL_BLEND);
+        //Render overlay to fake transparency
+        GlStateManager.color(0.5429f, 0.5429f, 0.5429f, 1.0f-alpha);
+        GlStateManager.disableTexture2D();    
+        GlStateManager.disableDepth();
+        GlStateManager.enableBlend(); 
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder tes = tessellator.getBuffer();
+        tes.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        tes.pos(x, y + 16, Minecraft.getMinecraft().getRenderItem().zLevel).endVertex();
+        tes.pos(x + 16, y + 16, Minecraft.getMinecraft().getRenderItem().zLevel).endVertex();
+        tes.pos(x + 16, y, Minecraft.getMinecraft().getRenderItem().zLevel).endVertex();
+        tes.pos(x, y, Minecraft.getMinecraft().getRenderItem().zLevel).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D(); 
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+		//GL11.glDisable(GL11.GL_BLEND);
     }
 }

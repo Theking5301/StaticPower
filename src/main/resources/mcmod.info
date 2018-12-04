@@ -1,16 +1,16 @@
 [
-{
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+    {
+      "modid": "staticpower",
+      "name": "Static Power",
+      "description": "TBD",
+      "version": "1.5.32",
+      "mcversion": "1.12.2",
+      "url": "https://refinedstorage.raoulvdberge.com",
+      "updateUrl": "",
+      "authorList": ["Amine Sebastian"],
+      "credits": "",
+      "logoFile": "",
+      "screenshots": [],
+      "dependencies": []
+    }
 ]

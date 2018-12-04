@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "moisture=0": { "model": "staticpower:AdvancedEarth" },
+        "moisture=1": { "model": "staticpower:AdvancedEarth" },
+        "moisture=2": { "model": "staticpower:AdvancedEarth" },
+        "moisture=3": { "model": "staticpower:AdvancedEarth" },
+        "moisture=4": { "model": "staticpower:AdvancedEarth" },
+        "moisture=5": { "model": "staticpower:AdvancedEarth" },
+        "moisture=6": { "model": "staticpower:AdvancedEarth" },
+        "moisture=7": { "model": "staticpower:AdvancedEarth" }
+    }
+}

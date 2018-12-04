@@ -1,0 +1,13 @@
+{
+    "__comment": "Model for when two adgacent sides are connected.",
+	"parent": "block/cube",
+    "textures": {
+		"particle": "staticpower:blocks/multiblock/connected_cube0C",
+        "down": "staticpower:blocks/multiblock/connected_cube1C_e",
+		"up": "staticpower:blocks/multiblock/connected_cube4C",
+		"north": "staticpower:blocks/multiblock/connected_cube2C_uw",
+		"south": "staticpower:blocks/multiblock/connected_cube2C_ue",
+		"west": "staticpower:blocks/multiblock/connected_cube1C_u",
+		"east": "staticpower:blocks/multiblock/connected_cube4C"
+    }
+}

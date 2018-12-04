@@ -2,40 +2,49 @@ package theking530.staticpower.items.upgrades;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import theking530.staticpower.StaticPower;
-import theking530.staticpower.assists.Reference;
-import theking530.staticpower.assists.Tier;
-import theking530.staticpower.utils.EnumTextFormatting;
+import javax.annotation.Nullable;
 
-public class BaseTankUpgrade extends BaseUpgrade{
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import theking530.staticpower.assists.Tier;
+import theking530.staticpower.assists.utilities.EnumTextFormatting;
+
+public class BaseTankUpgrade extends BaseUpgrade implements IMachineUpgrade {
+	
 	public float CAPACITY = 1f;
 	
 	public  BaseTankUpgrade(String name, Tier tier){
-		setCreativeTab(StaticPower.StaticPower);
-		setUnlocalizedName(name);
-		setRegistryName(name);	
+		super(name, tier);
 		switch(tier) {
-		case BASE:
-			CAPACITY = 1.5f;
+		case BASIC:
+			CAPACITY = (1.0f/maxStackSize);
 			break;
 		case STATIC:
-			CAPACITY = 2.0f;
+			CAPACITY = (1.5f/maxStackSize);
 			break;
 		case ENERGIZED:
-			CAPACITY = 2.5f;
+			CAPACITY = (2.0f/maxStackSize);
 			break;
 		case LUMUM:
-			CAPACITY = 3.0f;
+			CAPACITY = (2.5f/maxStackSize);
 			break;
 		default:
 			break;
 		}
 	}
-	
+	@Override
+	public float getUpgradeValueAtIndex(ItemStack stack, int upgradeNumber) {
+		BaseTankUpgrade tempUpgrade = (BaseTankUpgrade) stack.getItem();
+		return (tempUpgrade.CAPACITY * stack.getCount());
+	}
 	@Override  
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-		list.add(EnumTextFormatting.WHITE +  new java.text.DecimalFormat("#").format((CAPACITY-1)*100) + "%" + EnumTextFormatting.GREEN + " Tank Capacity");
-    }
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
+		list.add(EnumTextFormatting.WHITE +  "+" + new java.text.DecimalFormat("#").format((getUpgradeValueAtIndex(stack, 0))*100) + "%" + EnumTextFormatting.GREEN + " Tank Capacity");
+		if(showHiddenTooltips()) {
+    		list.add(EnumTextFormatting.WHITE + "Stacks Up To: " + stack.getMaxStackSize());
+    	}else{
+        	list.add(EnumTextFormatting.ITALIC + "Hold Shift");
+    	}
+	}
 }

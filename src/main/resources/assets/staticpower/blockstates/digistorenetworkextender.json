@@ -1,0 +1,8 @@
+{
+    "variants": {
+	    "facing=north": { "model": "staticpower:DigistoreNetworkExtender" },
+        "facing=south": { "model": "staticpower:DigistoreNetworkExtender", "y": 180 },
+        "facing=west":  { "model": "staticpower:DigistoreNetworkExtender", "y": 270 },
+        "facing=east":  { "model": "staticpower:DigistoreNetworkExtender", "y": 90 }
+    }
+}

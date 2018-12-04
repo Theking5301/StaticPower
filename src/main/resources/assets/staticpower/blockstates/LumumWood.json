@@ -1,8 +1,8 @@
 {
     "variants": {
         "axis=y":  { "model": "staticpower:LumumWood" },
-        "axis=z":   { "model": "staticpower:LumumWoodSide" },
-        "axis=x":   { "model": "staticpower:LumumWoodSide", "y": 90 },
+        "axis=z":   { "model": "staticpower:LumumWood", "x": 90 },
+        "axis=x":   { "model": "staticpower:LumumWood", "x": 90, "y": 90},
         "axis=none": { "model": "staticpower:LumumBark" }
     }
 }

@@ -1,0 +1,13 @@
+{
+    "__comment": "Model for when three adjacent connected sides are a T shape.",
+	"parent": "block/cube",
+    "textures": {
+		"particle": "staticpower:blocks/multiblock/connected_cube0C",
+        "down": "staticpower:blocks/multiblock/connected_cube4C",
+		"up": "staticpower:blocks/multiblock/connected_cube4C",
+		"north": "staticpower:blocks/multiblock/connected_cube3C_ued",
+		"south": "staticpower:blocks/multiblock/connected_cube3C_uwd",
+		"west": "staticpower:blocks/multiblock/connected_cube4C",
+		"east": "staticpower:blocks/multiblock/connected_cube2C_ud"
+    }
+}

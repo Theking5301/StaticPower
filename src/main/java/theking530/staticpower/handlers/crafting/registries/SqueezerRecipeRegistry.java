@@ -2,7 +2,6 @@ package theking530.staticpower.handlers.crafting.registries;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,46 +12,30 @@ import theking530.staticpower.handlers.crafting.wrappers.SqueezerOutputWrapper;
 public class SqueezerRecipeRegistry {
 
 	private static final SqueezerRecipeRegistry SQUEEZER_BASE = new SqueezerRecipeRegistry();
-	
-	@SuppressWarnings("rawtypes")
-	private Map SQUEEZE_MAP = new HashMap();
+
+	private Map<ItemStack, SqueezerOutputWrapper> SQUEEZE_MAP = new HashMap<ItemStack, SqueezerOutputWrapper>();
 	
 	public static SqueezerRecipeRegistry Squeezing() {
 		return SQUEEZER_BASE;
 	}	
 	public void addRecipe(ItemStack input, ItemStack output, FluidStack outputFluidStack){
-		SQUEEZE_MAP.put(input, new SqueezerOutputWrapper(output, outputFluidStack));
+		SQUEEZE_MAP.put(input, new SqueezerOutputWrapper(input, output, outputFluidStack));
 	}
-	public Map getSqueezingRecipes() {
+	public Map<ItemStack, SqueezerOutputWrapper> getSqueezingRecipes() {
 		return SQUEEZE_MAP;
 	}
-	public ItemStack getSqueezingItemResult(ItemStack input) {
-	    Iterator iterator = SQUEEZE_MAP.entrySet().iterator();
-	    Entry pair;
+	public SqueezerOutputWrapper getSqueezingRecipe(ItemStack input) {
+	    Iterator<Entry<ItemStack, SqueezerOutputWrapper>> iterator = SQUEEZE_MAP.entrySet().iterator();
+	    Entry<ItemStack, SqueezerOutputWrapper> pair;
 	    do {
 	    	if(!iterator.hasNext()) {
 	    		return null;
 	    	}
-	    	pair = (Entry) iterator.next();
+	    	pair = iterator.next();
 	    }while(!isValidRecipe(pair, input));
-	    
-	    SqueezerOutputWrapper outputWrapper = (SqueezerOutputWrapper)pair.getValue();
-		return outputWrapper.getOutputItem();
+		return pair.getValue();
 	}
-	public FluidStack getSqueezingFluidResult(ItemStack input) {
-	    Iterator iterator = SQUEEZE_MAP.entrySet().iterator();
-	    Entry pair;
-	    do {
-	    	if(!iterator.hasNext()) {
-	    		return null;
-	    	}
-	    	pair = (Entry) iterator.next();
-	    }while(!isValidRecipe(pair, input));
-	    
-	    SqueezerOutputWrapper outputWrapper = (SqueezerOutputWrapper)pair.getValue();	
-		return outputWrapper.getOutputFluid();
-	}
-	public boolean isValidRecipe(Entry entry, ItemStack input) {
+	public boolean isValidRecipe(Entry<?, ?> entry, ItemStack input) {
 		if(entry == null) {
 			return false;
 		}

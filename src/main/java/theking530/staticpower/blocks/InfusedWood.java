@@ -1,23 +1,13 @@
 package theking530.staticpower.blocks;
 
-import java.util.List;
-
-import com.google.common.base.Predicate;
-
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import theking530.staticpower.StaticPower;
-import theking530.staticpower.assists.RegisterHelper;
 
 public class InfusedWood extends BlockLog {
 	
@@ -30,7 +20,6 @@ public class InfusedWood extends BlockLog {
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setCreativeTab(StaticPower.StaticPower);
-		RegisterHelper.registerItem(new BaseItemBlock(this, name));
     }  
     public IBlockState getStateFromMeta(int meta) {
     	int vanillaMeta = meta;

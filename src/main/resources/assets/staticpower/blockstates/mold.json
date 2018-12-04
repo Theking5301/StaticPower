@@ -1,0 +1,15 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "builtin/generated",
+		"transform": "forge:default-item"
+	},
+	"variants": {
+		"variant": {
+			"moldblank":   			{"textures": {"layer0": "staticpower:items/molds/mold_blank"}},
+			"moldplate": 			{"textures": {"layer0": "staticpower:items/molds/mold_plate"}},	
+			"moldwire":     		{"textures": {"layer0": "staticpower:items/molds/mold_wire"}},
+			"moldgear": 			{"textures": {"layer0": "staticpower:items/molds/mold_gear"}}
+		}
+	}
+}

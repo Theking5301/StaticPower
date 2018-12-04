@@ -1,0 +1,19 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "builtin/generated",
+		"transform": "forge:default-item"
+	},
+	"variants": {
+		"model": {
+			"basic":     {"textures": {"layer0": "staticpower:items/upgrades/basic_digistore_capacity_upgrade"} },
+			"iron":   	 {"textures": {"layer0": "staticpower:items/upgrades/iron_digistore_capacity_upgrade"} },
+			"gold":   	 {"textures": {"layer0": "staticpower:items/upgrades/gold_digistore_capacity_upgrade"} },
+			"lead":   	 {"textures": {"layer0": "staticpower:items/upgrades/lead_digistore_capacity_upgrade"} },
+			"obsidian":  {"textures": {"layer0": "staticpower:items/upgrades/obsidian_digistore_capacity_upgrade"} },
+			"static":    {"textures": {"layer0": "staticpower:items/upgrades/static_digistore_capacity_upgrade"} },
+			"energized": {"textures": {"layer0": "staticpower:items/upgrades/energized_digistore_capacity_upgrade"} },
+			"lumum":     {"textures": {"layer0": "staticpower:items/upgrades/lumum_digistore_capacity_upgrade"} }
+		}
+	}
+}

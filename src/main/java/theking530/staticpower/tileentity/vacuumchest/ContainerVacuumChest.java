@@ -2,84 +2,49 @@ package theking530.staticpower.tileentity.vacuumchest;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import theking530.staticpower.client.gui.widgets.SlotFilter;
+import theking530.staticpower.container.BaseContainer;
+import theking530.staticpower.items.itemfilter.ItemFilter;
+import theking530.staticpower.items.upgrades.BaseUpgrade;
+import theking530.staticpower.machines.tileentitycomponents.slots.FilterSlot;
+import theking530.staticpower.machines.tileentitycomponents.slots.StaticPowerContainerSlot;
+import theking530.staticpower.machines.tileentitycomponents.slots.UpgradeSlot;
 
-public class ContainerVacuumChest extends Container {
+public class ContainerVacuumChest extends BaseContainer {
 	
-	private TileEntityVacuumChest V_CHEST;
-	private int numRows;
+	private TileEntityVacuumChest vacuumChest;
 
 	public ContainerVacuumChest(InventoryPlayer invPlayer, TileEntityVacuumChest teVChest) {
-		V_CHEST = teVChest;
-		numRows = V_CHEST.getSizeInventory() / 9;
-		
+		vacuumChest = teVChest;
+
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 9; x++) {
-				this.addSlotToContainer(new Slot(V_CHEST, x + y * 9, 8 + x * 18, 20 + y * 18));
+				this.addSlotToContainer(new StaticPowerContainerSlot(vacuumChest.slotsOutput, x + y * 9, 8 + x * 18, 20 + y * 18));
 			}
 		}
-		this.addSlotToContainer(new SlotFilter(V_CHEST, 27, 8, 78));
+		this.addSlotToContainer(new FilterSlot(vacuumChest.slotsInternal, 0, 8, 78));
 		
-		this.addSlotToContainer(new Slot(V_CHEST, 28, 116, 78));
-		this.addSlotToContainer(new Slot(V_CHEST, 29, 134, 78));
-		this.addSlotToContainer(new Slot(V_CHEST, 30, 152, 78));
+		this.addSlotToContainer(new UpgradeSlot(vacuumChest.slotsUpgrades, 0, 116, 78));
+		this.addSlotToContainer(new UpgradeSlot(vacuumChest.slotsUpgrades, 1, 134, 78));
+		this.addSlotToContainer(new UpgradeSlot(vacuumChest.slotsUpgrades, 2, 152, 78));
 		
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 103 + i * 18));
-			}
-		}
-		for (int i = 0; i < 9; i++) {
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 161));
-		}
+
+		this.addPlayerInventory(invPlayer, 8, 103);
+		this.addPlayerHotbar(invPlayer, 8, 161);
 	}
-
-	//Shift Click Functionality
-	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
-	{
-        ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(p_82846_2_);
-
-        if (slot != null && slot.getHasStack())
-        {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-
-            if (p_82846_2_ < this.numRows * 9)
-            {
-                if (!this.mergeItemStack(itemstack1, this.numRows * 9, this.inventorySlots.size(), true))
-                {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(itemstack1, 0, this.numRows * 9, false))
-            {
-                return null;
-            }
-
-            if (itemstack1.stackSize == 0)
-            {
-                slot.putStack((ItemStack)null);
-            }
-            else
-            {
-                slot.onSlotChanged();
-            }
-        }
-
-        return itemstack;
-    }
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return V_CHEST.isUseableByPlayer(player);
-	}	
-	//Detect Changes
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();		
+	protected boolean playerItemShiftClicked(ItemStack stack, EntityPlayer player, InventoryPlayer invPlayer, Slot slot, int slotIndex) {
+        if (stack.getItem() instanceof ItemFilter && !mergeItemStack(stack, 27)) {
+        	return true;
+        }
+        if (stack.getItem() instanceof BaseUpgrade && !mergeItemStack(stack, 28, 31, false)) {
+        	return true;
+        }
+        if (!mergeItemStack(stack, 0, 27, false)) {
+        	return true;
+        }
+		return false;	
 	}
 }
 	

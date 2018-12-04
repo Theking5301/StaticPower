@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "staticpower:HeatingElement" },
+        "facing=south": { "model": "staticpower:HeatingElement", "y": 180 },
+        "facing=west":  { "model": "staticpower:HeatingElement", "y": 270 },
+        "facing=east":  { "model": "staticpower:HeatingElement", "y": 90 }
+    }
+}

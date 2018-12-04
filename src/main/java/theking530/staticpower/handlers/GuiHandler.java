@@ -5,27 +5,68 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import theking530.staticpower.assists.Tier;
 import theking530.staticpower.client.GuiIDRegistry;
+import theking530.staticpower.items.book.ContainerStaticBook;
 import theking530.staticpower.items.book.GuiStaticBook;
 import theking530.staticpower.items.itemfilter.ContainerItemFilter;
 import theking530.staticpower.items.itemfilter.GuiItemFilter;
 import theking530.staticpower.items.itemfilter.InventoryItemFilter;
 import theking530.staticpower.items.itemfilter.ItemFilter;
+import theking530.staticpower.logic.gates.powercell.ContainerPowerCell;
+import theking530.staticpower.logic.gates.powercell.GuiPowerCell;
+import theking530.staticpower.logic.gates.powercell.TileEntityPowerCell;
+import theking530.staticpower.logic.gates.timer.ContainerTimer;
+import theking530.staticpower.logic.gates.timer.GuiTimer;
+import theking530.staticpower.logic.gates.timer.TileEntityTimer;
+import theking530.staticpower.logic.gates.transducer.ContainerMultiplier;
+import theking530.staticpower.logic.gates.transducer.GuiSignalMultiplier;
+import theking530.staticpower.logic.gates.transducer.TileEntitySignalMultiplier;
+import theking530.staticpower.machines.basicfarmer.ContainerBasicFarmer;
+import theking530.staticpower.machines.basicfarmer.GuiBasicFarmer;
+import theking530.staticpower.machines.basicfarmer.TileEntityBasicFarmer;
 import theking530.staticpower.machines.batteries.ContainerBattery;
 import theking530.staticpower.machines.batteries.GuiBattery;
 import theking530.staticpower.machines.batteries.tileentities.TileEntityBattery;
+import theking530.staticpower.machines.centrifuge.ContainerCentrifuge;
+import theking530.staticpower.machines.centrifuge.GuiCentrifuge;
+import theking530.staticpower.machines.centrifuge.TileEntityCentrifuge;
+import theking530.staticpower.machines.chargingstation.ContainerChargingStation;
+import theking530.staticpower.machines.chargingstation.GuiChargingStation;
+import theking530.staticpower.machines.chargingstation.TileEntityChargingStation;
+import theking530.staticpower.machines.condenser.ContainerCondenser;
+import theking530.staticpower.machines.condenser.GuiCondenser;
+import theking530.staticpower.machines.condenser.TileEntityCondenser;
 import theking530.staticpower.machines.cropsqueezer.ContainerCropSqueezer;
 import theking530.staticpower.machines.cropsqueezer.GuiCropSqueezer;
 import theking530.staticpower.machines.cropsqueezer.TileEntityCropSqueezer;
+import theking530.staticpower.machines.distillery.ContainerDistillery;
+import theking530.staticpower.machines.distillery.GuiDistillery;
+import theking530.staticpower.machines.distillery.TileEntityDistillery;
+import theking530.staticpower.machines.esotericenchanter.ContainerEsotericEnchanter;
+import theking530.staticpower.machines.esotericenchanter.GuiEsotericEnchanter;
+import theking530.staticpower.machines.esotericenchanter.TileEsotericEnchanter;
+import theking530.staticpower.machines.fermenter.ContainerFermenter;
+import theking530.staticpower.machines.fermenter.GuiFermenter;
+import theking530.staticpower.machines.fermenter.TileEntityFermenter;
 import theking530.staticpower.machines.fluidgenerator.ContainerFluidGenerator;
 import theking530.staticpower.machines.fluidgenerator.GuiFluidGenerator;
 import theking530.staticpower.machines.fluidgenerator.TileEntityFluidGenerator;
 import theking530.staticpower.machines.fluidinfuser.ContainerFluidInfuser;
 import theking530.staticpower.machines.fluidinfuser.GuiFluidInfuser;
 import theking530.staticpower.machines.fluidinfuser.TileEntityFluidInfuser;
+import theking530.staticpower.machines.former.ContainerFormer;
+import theking530.staticpower.machines.former.GuiFormer;
+import theking530.staticpower.machines.former.TileEntityFormer;
 import theking530.staticpower.machines.fusionfurnace.ContainerFusionFurnace;
 import theking530.staticpower.machines.fusionfurnace.GuiFusionFurnace;
 import theking530.staticpower.machines.fusionfurnace.TileEntityFusionFurnace;
+import theking530.staticpower.machines.lumbermill.ContainerLumberMill;
+import theking530.staticpower.machines.lumbermill.GuiLumberMill;
+import theking530.staticpower.machines.lumbermill.TileLumberMill;
+import theking530.staticpower.machines.mechanicalsqueezer.ContainerMechanicalSqueezer;
+import theking530.staticpower.machines.mechanicalsqueezer.GuiMechanicalSqueezer;
+import theking530.staticpower.machines.mechanicalsqueezer.TileEntityMechanicalSqueezer;
 import theking530.staticpower.machines.poweredfurnace.ContainerPoweredFurnace;
 import theking530.staticpower.machines.poweredfurnace.GuiPoweredFurnace;
 import theking530.staticpower.machines.poweredfurnace.TileEntityPoweredFurnace;
@@ -35,21 +76,26 @@ import theking530.staticpower.machines.poweredgrinder.TileEntityPoweredGrinder;
 import theking530.staticpower.machines.quarry.ContainerQuarry;
 import theking530.staticpower.machines.quarry.GuiQuarry;
 import theking530.staticpower.machines.quarry.TileEntityQuarry;
-import theking530.staticpower.machines.signalmultiplier.ContainerMultiplier;
-import theking530.staticpower.machines.signalmultiplier.GuiSignalMultiplier;
-import theking530.staticpower.machines.signalmultiplier.TileEntitySignalMultiplier;
-import theking530.staticpower.machines.solderingtable.ContainerSolderingTable;
-import theking530.staticpower.machines.solderingtable.GuiSolderingTable;
-import theking530.staticpower.machines.solderingtable.TileEntitySolderingTable;
-import theking530.staticpower.tileentity.energizedchest.ContainerEnergizedChest;
-import theking530.staticpower.tileentity.energizedchest.GuiEnergizedChest;
-import theking530.staticpower.tileentity.energizedchest.TileEntityEnergizedChest;
-import theking530.staticpower.tileentity.lumumchest.ContainerLumumChest;
-import theking530.staticpower.tileentity.lumumchest.GuiLumumChest;
-import theking530.staticpower.tileentity.lumumchest.TileEntityLumumChest;
-import theking530.staticpower.tileentity.staticchest.ContainerStaticChest;
-import theking530.staticpower.tileentity.staticchest.GuiStaticChest;
-import theking530.staticpower.tileentity.staticchest.TileEntityStaticChest;
+import theking530.staticpower.machines.refinery.controller.ContainerFluidRefineryController;
+import theking530.staticpower.machines.refinery.controller.GuiFluidRefineryController;
+import theking530.staticpower.machines.refinery.controller.TileEntityFluidRefineryController;
+import theking530.staticpower.machines.treefarmer.ContainerTreeFarmer;
+import theking530.staticpower.machines.treefarmer.GuiTreeFarmer;
+import theking530.staticpower.machines.treefarmer.TileEntityTreeFarm;
+import theking530.staticpower.tileentity.astralquary.brain.ContainerAstralQuarryBrain;
+import theking530.staticpower.tileentity.astralquary.brain.GuiAstralQuarryBrain;
+import theking530.staticpower.tileentity.astralquary.brain.TileEntityAstralQuarryBrain;
+import theking530.staticpower.tileentity.chest.ContainerChest;
+import theking530.staticpower.tileentity.chest.GuiChest;
+import theking530.staticpower.tileentity.chest.energizedchest.TileEntityEnergizedChest;
+import theking530.staticpower.tileentity.chest.lumumchest.TileEntityLumumChest;
+import theking530.staticpower.tileentity.chest.staticchest.TileEntityStaticChest;
+import theking530.staticpower.tileentity.digistorenetwork.digistore.ContainerDigistore;
+import theking530.staticpower.tileentity.digistorenetwork.digistore.GuiDigistore;
+import theking530.staticpower.tileentity.digistorenetwork.digistore.TileEntityDigistore;
+import theking530.staticpower.tileentity.solderingtable.ContainerSolderingTable;
+import theking530.staticpower.tileentity.solderingtable.GuiSolderingTable;
+import theking530.staticpower.tileentity.solderingtable.TileEntitySolderingTable;
 import theking530.staticpower.tileentity.vacuumchest.ContainerVacuumChest;
 import theking530.staticpower.tileentity.vacuumchest.GuiVacuumChest;
 import theking530.staticpower.tileentity.vacuumchest.TileEntityVacuumChest;
@@ -73,9 +119,39 @@ public class GuiHandler implements IGuiHandler {
 					return new ContainerFluidGenerator(player.inventory, (TileEntityFluidGenerator) entity);
 				}
 				return null;
+			case GuiIDRegistry.guiDistilery:
+				if (entity instanceof TileEntityDistillery) {	
+					return new ContainerDistillery(player.inventory, (TileEntityDistillery) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiCondenser:
+				if (entity instanceof TileEntityCondenser) {	
+					return new ContainerCondenser(player.inventory, (TileEntityCondenser) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiBasicFarmer:
+				if (entity instanceof TileEntityBasicFarmer) {	
+					return new ContainerBasicFarmer(player.inventory, (TileEntityBasicFarmer) entity);
+				}
+				return null;
 			case GuiIDRegistry.guiIDCropSqueezer:
 				if (entity instanceof TileEntityCropSqueezer) {	
 					return new ContainerCropSqueezer(player.inventory, (TileEntityCropSqueezer) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiMechanicalSqueezer:
+				if (entity instanceof TileEntityMechanicalSqueezer) {	
+					return new ContainerMechanicalSqueezer(player.inventory, (TileEntityMechanicalSqueezer) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDChargingStation:
+				if (entity instanceof TileEntityChargingStation) {	
+					return new ContainerChargingStation(player.inventory, (TileEntityChargingStation) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiFermenter:
+				if (entity instanceof TileEntityFermenter) {	
+					return new ContainerFermenter(player.inventory, (TileEntityFermenter) entity);
 				}
 				return null;
 			case GuiIDRegistry.guiIDFusionFurnace:
@@ -83,6 +159,16 @@ public class GuiHandler implements IGuiHandler {
 					return new ContainerFusionFurnace(player.inventory, (TileEntityFusionFurnace) entity);
 				}
 				return null;	
+			case GuiIDRegistry.guiPowerCell:
+				if (entity instanceof TileEntityPowerCell) {	
+					return new ContainerPowerCell(player.inventory, (TileEntityPowerCell) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiTimer:
+				if (entity instanceof TileEntityTimer) {	
+					return new ContainerTimer(player.inventory, (TileEntityTimer) entity);
+				}
+				return null;
 			case GuiIDRegistry.guiIDQuarry:
 				if (entity instanceof TileEntityQuarry) {	
 					return new ContainerQuarry(player.inventory, (TileEntityQuarry) entity);
@@ -115,30 +201,72 @@ public class GuiHandler implements IGuiHandler {
 				return null;
 			case GuiIDRegistry.guiIDStaticChest:
 				if (entity instanceof TileEntityStaticChest) {	
-					return new ContainerStaticChest(player.inventory, (TileEntityStaticChest) entity);
+					return new ContainerChest(Tier.STATIC, player.inventory, (TileEntityStaticChest) entity);
 				}
 				return null;
 			case GuiIDRegistry.guiIDEnergizedChest:
 				if (entity instanceof TileEntityEnergizedChest) {	
-					return new ContainerEnergizedChest(player.inventory, (TileEntityEnergizedChest) entity);
+					return new ContainerChest(Tier.ENERGIZED, player.inventory, (TileEntityEnergizedChest) entity);
 				}
 				return null;
 			case GuiIDRegistry.guiIDLumumChest:
 				if (entity instanceof TileEntityLumumChest) {	
-					return new ContainerLumumChest(player.inventory, (TileEntityLumumChest) entity);
+					return new ContainerChest(Tier.LUMUM, player.inventory, (TileEntityLumumChest) entity);
 				}
 				return null;
 			case GuiIDRegistry.guiIDSignalMultiplier:
 				if (entity instanceof TileEntitySignalMultiplier) {	
 					return new ContainerMultiplier(player.inventory, (TileEntitySignalMultiplier) entity);
 				}
-				return null;							
+				return null;	
+			case GuiIDRegistry.guiIDDigistore:
+				if (entity instanceof TileEntityDigistore) {	
+					return new ContainerDigistore(player.inventory, (TileEntityDigistore) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDEsotericEnchanter:
+				if (entity instanceof TileEsotericEnchanter) {	
+					return new ContainerEsotericEnchanter(player.inventory, (TileEsotericEnchanter) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDFormer:
+				if (entity instanceof TileEntityFormer) {	
+					return new ContainerFormer(player.inventory, (TileEntityFormer) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDTreeFarmer:
+				if (entity instanceof TileEntityTreeFarm) {	
+					return new ContainerTreeFarmer(player.inventory, (TileEntityTreeFarm) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDCentrifuge:
+				if (entity instanceof TileEntityCentrifuge) {	
+					return new ContainerCentrifuge(player.inventory, (TileEntityCentrifuge) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDAstralQuary:
+				if (entity instanceof TileEntityAstralQuarryBrain) {	
+					return new ContainerAstralQuarryBrain(player.inventory, (TileEntityAstralQuarryBrain) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDFluidRefineryController:
+				if (entity instanceof TileEntityFluidRefineryController) {	
+					return new ContainerFluidRefineryController(player.inventory, (TileEntityFluidRefineryController) entity);
+				}
+				return null;
+			case GuiIDRegistry.guiIDLumberMill:
+				if (entity instanceof TileLumberMill) {	
+					return new ContainerLumberMill(player.inventory, (TileLumberMill) entity);
+				}
+				return null;
 			}
 		}else{
 			switch(ID) {
 			case GuiIDRegistry.guiIDItemFilter:
 				ItemFilter filter = (ItemFilter)player.getHeldItemMainhand().getItem();
-				return new ContainerItemFilter(player.inventory, new InventoryItemFilter(player.getHeldItemMainhand(), filter.TIER), filter.TIER);
+				return new ContainerItemFilter(player.inventory, new InventoryItemFilter(player.getHeldItemMainhand(), filter.filterTier));
+			case GuiIDRegistry.guiIDStaticBook:
+				return new ContainerStaticBook();
 			}
 		}
 		return null;
@@ -157,6 +285,16 @@ public class GuiHandler implements IGuiHandler {
 					return new GuiFluidInfuser(player.inventory, (TileEntityFluidInfuser) entity);				
 				}
 				return null;
+			case GuiIDRegistry.guiDistilery:
+				if (entity instanceof TileEntityDistillery) {	
+					return new GuiDistillery(player.inventory, (TileEntityDistillery) entity);				
+				}
+				return null;
+			case GuiIDRegistry.guiCondenser:
+				if (entity instanceof TileEntityCondenser) {	
+					return new GuiCondenser(player.inventory, (TileEntityCondenser) entity);				
+				}
+				return null;
 			case GuiIDRegistry.guiIDFluidGenerator:
 				if (entity instanceof TileEntityFluidGenerator) {	
 					return new GuiFluidGenerator(player.inventory, (TileEntityFluidGenerator) entity);			
@@ -167,9 +305,20 @@ public class GuiHandler implements IGuiHandler {
 					return new GuiCropSqueezer(player.inventory, (TileEntityCropSqueezer) entity);			
 				}
 				return null;
+			case GuiIDRegistry.guiMechanicalSqueezer:
+				if (entity instanceof TileEntityMechanicalSqueezer) {	
+					return new GuiMechanicalSqueezer(player.inventory, (TileEntityMechanicalSqueezer) entity);			
+				}
+				return null;
 			case GuiIDRegistry.guiIDVacuumChest:
 				if (entity instanceof TileEntityVacuumChest) {	
 					return new GuiVacuumChest(player.inventory, (TileEntityVacuumChest) entity);
+				
+				}
+				return null;
+			case GuiIDRegistry.guiFermenter:
+				if (entity instanceof TileEntityFermenter) {	
+					return new GuiFermenter(player.inventory, (TileEntityFermenter) entity);
 				
 				}
 				return null;
@@ -177,6 +326,26 @@ public class GuiHandler implements IGuiHandler {
 				if (entity instanceof TileEntityPoweredGrinder) {	
 					return new GuiPoweredGrinder(player.inventory, (TileEntityPoweredGrinder) entity);					
 					}
+				return null;
+			case GuiIDRegistry.guiPowerCell:
+				if (entity instanceof TileEntityPowerCell) {	
+					return new GuiPowerCell(player.inventory, (TileEntityPowerCell) entity);					
+					}
+				return null;
+			case GuiIDRegistry.guiTimer:
+				if (entity instanceof TileEntityTimer) {	
+					return new GuiTimer(player.inventory, (TileEntityTimer) entity);					
+					}
+				return null;
+			case GuiIDRegistry.guiIDChargingStation:
+				if (entity instanceof TileEntityChargingStation) {	
+					return new GuiChargingStation(player.inventory, (TileEntityChargingStation) entity);					
+					}
+				return null;
+			case GuiIDRegistry.guiBasicFarmer:
+				if (entity instanceof TileEntityBasicFarmer) {	
+					return new GuiBasicFarmer(player.inventory, (TileEntityBasicFarmer) entity);					
+				}
 				return null;
 			case GuiIDRegistry.guiIDPoweredFurnace:
 				if (entity instanceof TileEntityPoweredFurnace) {	
@@ -205,17 +374,17 @@ public class GuiHandler implements IGuiHandler {
 				return null;
 			case GuiIDRegistry.guiIDStaticChest:
 				if (entity instanceof TileEntityStaticChest) {	
-					return new GuiStaticChest(player.inventory, (TileEntityStaticChest) entity);				
+					return new GuiChest(Tier.STATIC, player.inventory, (TileEntityStaticChest) entity);				
 				}
 				return null;
 			case GuiIDRegistry.guiIDEnergizedChest:
 				if (entity instanceof TileEntityEnergizedChest) {	
-					return new GuiEnergizedChest(player.inventory, (TileEntityEnergizedChest) entity);			
+					return new GuiChest(Tier.ENERGIZED, player.inventory, (TileEntityEnergizedChest) entity);			
 				}
 				return null;
 			case GuiIDRegistry.guiIDLumumChest:
 				if (entity instanceof TileEntityLumumChest) {	
-					return new GuiLumumChest(player.inventory, (TileEntityLumumChest) entity);				
+					return new GuiChest(Tier.LUMUM, player.inventory, (TileEntityLumumChest) entity);				
 				}
 				return null;
 			case GuiIDRegistry.guiIDSignalMultiplier:
@@ -223,16 +392,54 @@ public class GuiHandler implements IGuiHandler {
 					return new GuiSignalMultiplier(player.inventory, (TileEntitySignalMultiplier) entity);				
 				}
 				return null;
+			case GuiIDRegistry.guiIDDigistore:
+				if (entity instanceof TileEntityDigistore) {	
+					return new GuiDigistore(player.inventory, (TileEntityDigistore) entity);				
+				}
+				return null;
+			case GuiIDRegistry.guiIDEsotericEnchanter:
+				if (entity instanceof TileEsotericEnchanter) {	
+					return new GuiEsotericEnchanter(player.inventory, (TileEsotericEnchanter) entity);				
+				}
+				return null;
+			case GuiIDRegistry.guiIDFormer:
+				if (entity instanceof TileEntityFormer) {	
+					return new GuiFormer(player.inventory, (TileEntityFormer) entity);				
+				}
+				return null;
+			case GuiIDRegistry.guiIDTreeFarmer:
+				if (entity instanceof TileEntityTreeFarm) {	
+					return new GuiTreeFarmer(player.inventory, (TileEntityTreeFarm) entity);				
+				}
+			case GuiIDRegistry.guiIDCentrifuge:
+				if (entity instanceof TileEntityCentrifuge) {	
+					return new GuiCentrifuge(player.inventory, (TileEntityCentrifuge) entity);				
+				}
+				return null;
+			case GuiIDRegistry.guiIDAstralQuary:
+				if (entity instanceof TileEntityAstralQuarryBrain) {	
+					return new GuiAstralQuarryBrain(player.inventory, (TileEntityAstralQuarryBrain) entity);				
+				}
+				return null;
+			case GuiIDRegistry.guiIDFluidRefineryController:
+				if (entity instanceof TileEntityFluidRefineryController) {	
+					return new GuiFluidRefineryController(player.inventory, (TileEntityFluidRefineryController) entity);				
+				}
+				return null;
+			case GuiIDRegistry.guiIDLumberMill:
+				if (entity instanceof TileLumberMill) {	
+					return new GuiLumberMill(player.inventory, (TileLumberMill) entity);				
+				}
+				return null;
 			}
 		}else{
 			switch(ID) {
 			case GuiIDRegistry.guiIDItemFilter:
 				ItemFilter filter = (ItemFilter)player.getHeldItemMainhand().getItem();
-				return new GuiItemFilter(player.inventory, filter.TIER, new InventoryItemFilter(player.getHeldItemMainhand(), filter.TIER));
+				return new GuiItemFilter(player.inventory, new InventoryItemFilter(player.getHeldItemMainhand(), filter.filterTier));
 			
 			case GuiIDRegistry.guiIDStaticBook:
-				ItemFilter book = (ItemFilter)player.getHeldItemMainhand().getItem();
-				return new GuiStaticBook();
+				return new GuiStaticBook(player.inventory);
 			}
 		}
 		return null;

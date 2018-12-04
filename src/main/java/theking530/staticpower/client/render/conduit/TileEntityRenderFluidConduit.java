@@ -2,20 +2,17 @@ package theking530.staticpower.client.render.conduit;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import theking530.staticpower.assists.Reference;
+import theking530.staticpower.conduits.TileEntityBaseConduit;
 import theking530.staticpower.conduits.fluidconduit.TileEntityFluidConduit;
 
 public class TileEntityRenderFluidConduit extends TileEntityRenderBaseConduit {
 	
-	ResourceLocation texture = new ResourceLocation(Reference.MODID, "textures/models/conduits/FluidConduit.png");
-	ResourceLocation pullTexture = new ResourceLocation(Reference.MODID, "textures/models/conduits/FluidConduitPull.png");
+	ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "textures/models/conduits/FluidConduit.png");
+	ResourceLocation pullTexture = new ResourceLocation(Reference.MOD_ID, "textures/models/conduits/FluidConduitPull.png");
 	boolean drawInside = false;
 	
 	float pixel = 1F/16F;
@@ -23,7 +20,7 @@ public class TileEntityRenderFluidConduit extends TileEntityRenderBaseConduit {
 	static float width = .1F;
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double translationX, double translationY, double translationZ, float f, int dest) {
+	public void render(TileEntityBaseConduit tileentity, double translationX, double translationY, double translationZ, float f, int dest, float alpha) {
 		TileEntityFluidConduit conduit = (TileEntityFluidConduit)tileentity;
 		FluidStack fluidStack = conduit.TANK.getFluid();	
 		
@@ -39,7 +36,7 @@ public class TileEntityRenderFluidConduit extends TileEntityRenderBaseConduit {
 					}else{
 						this.bindTexture(texture);
 					}
-					drawConnection(conduit.receivers[i], tileentity);
+					drawConnection(conduit.receivers[i], tileentity, 9.0f, 12.0f);
 					if(fluidStack != null) {
 						bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 						//drawConnectionLiquid(conduit.receivers[i], tileentity, fluidStack);
@@ -50,7 +47,7 @@ public class TileEntityRenderFluidConduit extends TileEntityRenderBaseConduit {
 		}
 			if (!conduit.straightConnection(conduit.connections)) {
 				this.bindTexture(texture);
-				drawNode(tileentity); 			
+				drawNode(tileentity, 11.0f); 			
 				if(fluidStack != null) {
 					bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 					//drawNodeLiquid(tileentity, fluidStack);
@@ -58,7 +55,7 @@ public class TileEntityRenderFluidConduit extends TileEntityRenderBaseConduit {
 				for(int i = 0; i < conduit.connections.length; i++) {
 					if(conduit.connections[i] != null) {
 						this.bindTexture(texture);
-						drawCore(conduit.connections[i]);
+						drawCore(conduit.connections[i], tileentity, 12.0f);
 						if(fluidStack != null) {
 							bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 							//drawCoreLiquid(conduit.connections[i], tileentity, fluidStack);
@@ -69,7 +66,7 @@ public class TileEntityRenderFluidConduit extends TileEntityRenderBaseConduit {
 				for(int i = 0; i < conduit.connections.length; i++) 
 					if(conduit.connections[i] != null) {	
 						this.bindTexture(texture);
-						drawStraight(conduit.connections[i]);
+						drawStraight(conduit.connections[i], tileentity, 12.0f);
 						if(fluidStack != null) {
 							bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 							//drawStraightLiquid(conduit.connections[i], tileentity, fluidStack);

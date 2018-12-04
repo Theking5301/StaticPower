@@ -1,0 +1,19 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "builtin/generated",
+		"transform": "forge:default-item"
+	},
+	"variants": {
+		"variant": {
+			"distillerygrain": 	{"textures": {"layer0": "staticpower:items/misc_items/distillery_grains"}},
+			"flourwheat": 		{"textures": {"layer0": "staticpower:items/misc_items/flour_wheat"}},
+			"flourpotato": 		{"textures": {"layer0": "staticpower:items/misc_items/flour_potato"}},
+			"potatobread": 		{"textures": {"layer0": "staticpower:items/misc_items/potato_bread"}},
+			"applepie": 		{"textures": {"layer0": "staticpower:items/misc_items/apple_pie"}},
+			"staticpie": 		{"textures": {"layer0": "staticpower:items/misc_items/static_pie"}},
+			"energizedpie": 	{"textures": {"layer0": "staticpower:items/misc_items/energized_pie"}},
+			"lumumpie": 		{"textures": {"layer0": "staticpower:items/misc_items/lumum_pie"}}
+		}
+	}
+}

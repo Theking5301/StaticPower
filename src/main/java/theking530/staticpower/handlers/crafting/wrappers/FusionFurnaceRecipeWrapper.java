@@ -3,19 +3,19 @@ package theking530.staticpower.handlers.crafting.wrappers;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.item.crafting.Ingredient;
 
 public class FusionFurnaceRecipeWrapper {
 
-	protected ItemStack INPUT1;
-	protected ItemStack INPUT2;
-	protected ItemStack INPUT3;
-	protected ItemStack INPUT4;
-	protected ItemStack INPUT5;
+	protected Ingredient INPUT1;
+	protected Ingredient INPUT2;
+	protected Ingredient INPUT3;
+	protected Ingredient INPUT4;
+	protected Ingredient INPUT5;
 	
-	protected final ItemStack OUTPUT;
+	protected ItemStack OUTPUT;
 	
-	public FusionFurnaceRecipeWrapper(ItemStack output, ItemStack...inputs) {
+	public FusionFurnaceRecipeWrapper(ItemStack output, Ingredient...inputs) {
 		if(inputs.length > 0) {
 			if(inputs[0] != null) {
 				INPUT1 = inputs[0];
@@ -65,8 +65,8 @@ public class FusionFurnaceRecipeWrapper {
 		}
 		return tempCount;
 	}
-	public ArrayList<ItemStack> getInputs(){
-		ArrayList<ItemStack> tempList = new ArrayList();
+	public ArrayList<Ingredient> getInputs(){
+		ArrayList<Ingredient> tempList = new ArrayList<Ingredient>();
 		if(INPUT1 != null) {
 			tempList.add(INPUT1);
 		}
@@ -83,5 +83,24 @@ public class FusionFurnaceRecipeWrapper {
 			tempList.add(INPUT5);
 		}
 		return tempList;
+	}
+	public boolean isSatisfied(ItemStack... inputs) {	
+		if(inputs.length < getInputItemCount()) {
+			return false;
+		}
+		ArrayList<ItemStack> tempInputs = new ArrayList<ItemStack>();
+		for(ItemStack item : inputs) {
+			tempInputs.add(item);
+		}
+		
+		for(Ingredient ingredient : getInputs()) {
+			for(int k=tempInputs.size()-1; k >= 0; k--) {
+				if(ingredient.apply(tempInputs.get(k))) {
+					tempInputs.remove(k);
+				}
+			}
+		}
+		
+		return tempInputs.size() == 0;
 	}
 }
